@@ -72,8 +72,6 @@ public class Main extends javax.swing.JFrame {
         body.setOpaque(false);
         body.setLayout(new java.awt.BorderLayout());
 
-        user2.setOpaque(false);
-
         roundPanel2.setBackground(new java.awt.Color(51, 51, 51));
         roundPanel2.setLayout(new java.awt.GridBagLayout());
 
@@ -91,7 +89,7 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(menu2, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                    .addComponent(user2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(user2, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(roundPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(body, javax.swing.GroupLayout.DEFAULT_SIZE, 948, Short.MAX_VALUE)

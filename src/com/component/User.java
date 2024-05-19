@@ -25,30 +25,29 @@ public class User extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         roundPanel1 = new com.swing.RoundPanel();
         jPanel1 = new javax.swing.JPanel();
-        imageAvatar1 = new com.raven.swing.ImageAvatar();
+        jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         setOpaque(false);
 
         roundPanel1.setBackground(new java.awt.Color(51, 51, 51));
-        roundPanel1.setOpaque(false);
         roundPanel1.setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
+        jPanel1.setMaximumSize(new java.awt.Dimension(1000, 1000));
+        jPanel1.setMinimumSize(new java.awt.Dimension(0, 0));
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
 
-        imageAvatar1.setBackground(new java.awt.Color(204, 204, 204));
-        imageAvatar1.setForeground(new java.awt.Color(255, 255, 255));
-        imageAvatar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/icon/profile.png"))); // NOI18N
-        imageAvatar1.setMaximumSize(new java.awt.Dimension(200, 80));
-        imageAvatar1.setMinimumSize(new java.awt.Dimension(100, 70));
-        imageAvatar1.setOpaque(true);
-        imageAvatar1.setPreferredSize(new java.awt.Dimension(100, 70));
-        jPanel1.add(imageAvatar1);
+        jLabel3.setBackground(new java.awt.Color(204, 204, 204));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/icon/profile.png"))); // NOI18N
+        jLabel3.setAlignmentX(0.5F);
+        jPanel1.add(jLabel3);
 
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(224, 224, 224));
@@ -61,25 +60,31 @@ public class User extends javax.swing.JPanel {
         jLabel2.setAlignmentX(0.5F);
         jPanel1.add(jLabel2);
 
-        roundPanel1.add(jPanel1, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.gridheight = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        roundPanel1.add(jPanel1, gridBagConstraints);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(roundPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+            .addComponent(roundPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(roundPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+            .addComponent(roundPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.raven.swing.ImageAvatar imageAvatar1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private com.swing.RoundPanel roundPanel1;
     // End of variables declaration//GEN-END:variables
