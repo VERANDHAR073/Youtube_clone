@@ -10,7 +10,7 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.MySql;
+import com.model.MySql;
 
 public class ReleaseSalary extends javax.swing.JPanel {
 

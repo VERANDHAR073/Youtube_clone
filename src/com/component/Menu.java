@@ -79,7 +79,10 @@ public class Menu extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         panelMenu = new javax.swing.JPanel();
 
+        setOpaque(false);
+
         roundPanel2.setBackground(new java.awt.Color(51, 51, 51));
+        roundPanel2.setOpaque(false);
 
         jScrollPane1.setBorder(null);
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);

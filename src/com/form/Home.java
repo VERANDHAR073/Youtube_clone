@@ -12,7 +12,7 @@ import java.util.Locale;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.MySql;
+import com.model.MySql;
 
 public class Home extends javax.swing.JPanel {
 
@@ -322,6 +322,7 @@ public class Home extends javax.swing.JPanel {
         );
 
         roundPanel2.setBackground(new java.awt.Color(51, 51, 51));
+        roundPanel2.setOpaque(false);
         roundPanel2.setLayout(new javax.swing.OverlayLayout(roundPanel2));
 
         jPanel2.setBackground(new java.awt.Color(51, 51, 51));

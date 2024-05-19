@@ -7,12 +7,13 @@ import com.main.Main;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import javax.swing.JFrame;
-import model.MySql;
+import com.model.MySql;
 
 public class Login extends javax.swing.JFrame {
     
     public Login() {
         initComponents();
+        roundPanel1.setOpaque(true);
     }
     
     @SuppressWarnings("unchecked")

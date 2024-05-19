@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.MySql;
+import com.model.MySql;
 
 public class PumpersReg extends javax.swing.JPanel {
 

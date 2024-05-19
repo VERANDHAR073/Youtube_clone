@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import model.MySql;
+import com.model.MySql;
 
 public class BalanceSheet extends javax.swing.JPanel {
 
