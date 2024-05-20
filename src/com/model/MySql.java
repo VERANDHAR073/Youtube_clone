@@ -20,7 +20,7 @@ public class MySql {
     public static void createConnection()  throws Exception{
         if (connection == null) {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://154.41.240.103/u627261119_fualstaion?autoReconnect=true&serverTimezone=UTC&useSSL=false&connectTimeout=30000", "u627261119_fualstaion", "Charuka0606");
+            connection = DriverManager.getConnection("jdbc:mysql://154.41.240.103/u627261119_fuelmaster?autoReconnect=true&serverTimezone=UTC&useSSL=false&connectTimeout=30000", "u627261119_fuelmaster", "Charuka0606");
         }
     }
     
