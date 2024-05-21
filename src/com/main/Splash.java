@@ -38,7 +38,7 @@ public class Splash extends javax.swing.JFrame {
                     }
                 }  
                 this.dispose();
-                new Login().setVisible(true);
+                new LoginNavigator().setVisible(true);
             }
         );
         

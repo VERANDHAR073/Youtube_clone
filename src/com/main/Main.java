@@ -10,6 +10,7 @@ import com.form.Reports;
 import com.model.UserDetails;
 import java.awt.Color;
 import java.awt.Component;
+import javax.swing.JOptionPane;
 
 
 public class Main extends javax.swing.JFrame {
@@ -33,7 +34,10 @@ public class Main extends javax.swing.JFrame {
                 }else if (index == 5) {
                     showForm(new Reports());
                 } else if (index == 8) {
-                    System.exit(0);
+                    int selectOption=JOptionPane.showConfirmDialog(rootPane,"Are you sure about logging out from the system?","Confirm",JOptionPane.YES_NO_OPTION);
+                    if(selectOption == JOptionPane.YES_OPTION){
+                        System.exit(0);;
+                    }   
                 }
             }
         };
