@@ -221,7 +221,7 @@ public class AdminLogin extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         int selectOption=JOptionPane.showConfirmDialog(this,"Are you sure about exiting from the system?","Confirm",JOptionPane.YES_NO_OPTION);
         if(selectOption == JOptionPane.YES_OPTION){
-            System.exit(0);;
+            System.exit(0);
         }                
     }//GEN-LAST:event_jButton4ActionPerformed
 
