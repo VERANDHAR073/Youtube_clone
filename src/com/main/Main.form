@@ -134,7 +134,6 @@
                           <Component id="buttonMenu3" alignment="0" max="32767" attributes="0"/>
                           <Component id="buttonMenu4" alignment="1" pref="208" max="32767" attributes="0"/>
                           <Component id="buttonMenu5" alignment="0" max="32767" attributes="0"/>
-                          <Component id="buttonMenu6" alignment="1" max="32767" attributes="0"/>
                           <Component id="buttonMenu7" alignment="1" max="32767" attributes="0"/>
                           <Component id="buttonMenu8" alignment="0" max="32767" attributes="0"/>
                       </Group>
@@ -154,10 +153,8 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="buttonMenu5" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="buttonMenu6" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="buttonMenu7" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="178" max="32767" attributes="0"/>
+                      <EmptySpace pref="226" max="32767" attributes="0"/>
                       <Component id="buttonMenu8" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -219,20 +216,6 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonMenu5ActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="com.swing.ButtonMenu" name="buttonMenu6">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/com/icon/5.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="   Others"/>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Quicksand" size="12" style="0"/>
-                </Property>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonMenu6ActionPerformed"/>
               </Events>
             </Component>
             <Component class="com.swing.ButtonMenu" name="buttonMenu7">

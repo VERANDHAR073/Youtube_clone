@@ -2,7 +2,6 @@ package com.form;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.frams.BalanceSheet;
 import com.frams.Profit;
-import com.frams.Sales;
 import java.awt.Component;
 
 public class Reports extends javax.swing.JPanel {

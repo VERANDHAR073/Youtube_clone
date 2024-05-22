@@ -174,7 +174,7 @@ public class FualAndPumpReg extends javax.swing.JPanel {
         roundPanel1.setBackground(new java.awt.Color(102, 102, 102));
 
         jLabel5.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel5.setFont(new java.awt.Font("Quicksand", 1, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Quicksand", 0, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel5.setText("Fuel Register");

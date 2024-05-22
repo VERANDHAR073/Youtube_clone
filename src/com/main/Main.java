@@ -1,12 +1,10 @@
 package com.main;
 
 import com.form.Home;
-import com.form.Other;
-import com.form.PumpRelese;
+import com.form.ImportingAndReleasing;
 import com.form.PumperDetails;
 import com.form.Register;
 import com.form.Reports;
-import com.frams.ReleaseSalary;
 import com.model.UserDetails;
 import com.swing.ButtonMenu;
 import java.awt.Color;
@@ -55,7 +53,6 @@ public class Main extends javax.swing.JFrame {
         buttonMenu3 = new com.swing.ButtonMenu();
         buttonMenu4 = new com.swing.ButtonMenu();
         buttonMenu5 = new com.swing.ButtonMenu();
-        buttonMenu6 = new com.swing.ButtonMenu();
         buttonMenu7 = new com.swing.ButtonMenu();
         buttonMenu8 = new com.swing.ButtonMenu();
 
@@ -116,15 +113,6 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        buttonMenu6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/icon/5.png"))); // NOI18N
-        buttonMenu6.setText("   Others");
-        buttonMenu6.setFont(new java.awt.Font("Quicksand", 0, 12)); // NOI18N
-        buttonMenu6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonMenu6ActionPerformed(evt);
-            }
-        });
-
         buttonMenu7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/icon/8.png"))); // NOI18N
         buttonMenu7.setText("   Reports");
         buttonMenu7.setFont(new java.awt.Font("Quicksand", 0, 12)); // NOI18N
@@ -154,7 +142,6 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(buttonMenu3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(buttonMenu4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
                     .addComponent(buttonMenu5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonMenu6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(buttonMenu7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(buttonMenu8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -171,10 +158,8 @@ public class Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(buttonMenu5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(buttonMenu6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(buttonMenu7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 178, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
                 .addComponent(buttonMenu8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -229,7 +214,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonMenu2ActionPerformed
 
     private void buttonMenu4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonMenu4ActionPerformed
-        showForm(new ReleaseSalary());
+        showForm(new ImportingAndReleasing());
         setSelected(buttonMenu4);
     }//GEN-LAST:event_buttonMenu4ActionPerformed
 
@@ -242,11 +227,6 @@ public class Main extends javax.swing.JFrame {
         showForm(new PumperDetails());
         setSelected(buttonMenu5);
     }//GEN-LAST:event_buttonMenu5ActionPerformed
-
-    private void buttonMenu6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonMenu6ActionPerformed
-        showForm(new Other());
-        setSelected(buttonMenu6);
-    }//GEN-LAST:event_buttonMenu6ActionPerformed
 
     private void buttonMenu7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonMenu7ActionPerformed
         showForm(new Reports());
@@ -267,7 +247,6 @@ public class Main extends javax.swing.JFrame {
     private com.swing.ButtonMenu buttonMenu3;
     private com.swing.ButtonMenu buttonMenu4;
     private com.swing.ButtonMenu buttonMenu5;
-    private com.swing.ButtonMenu buttonMenu6;
     private com.swing.ButtonMenu buttonMenu7;
     private com.swing.ButtonMenu buttonMenu8;
     private javax.swing.JLabel jLabel1;
