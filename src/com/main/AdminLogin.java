@@ -1,6 +1,7 @@
 package com.main;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import com.main.AdminNavigator;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import javax.swing.JFrame;
@@ -39,7 +40,7 @@ public class AdminLogin extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Bahnschrift", 1, 24)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Administrator Login");
+        jLabel5.setText("Grocery Store Login");
         jLabel5.setToolTipText("");
 
         jTextField1.setBackground(new java.awt.Color(102, 102, 102));
@@ -98,11 +99,11 @@ public class AdminLogin extends javax.swing.JFrame {
         jImagePanel1.setLayout(jImagePanel1Layout);
         jImagePanel1Layout.setHorizontalGroup(
             jImagePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 148, Short.MAX_VALUE)
+            .addGap(0, 142, Short.MAX_VALUE)
         );
         jImagePanel1Layout.setVerticalGroup(
             jImagePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 181, Short.MAX_VALUE)
+            .addGap(0, 180, Short.MAX_VALUE)
         );
 
         jButton4.setBackground(new java.awt.Color(193, 39, 45));
@@ -127,9 +128,6 @@ public class AdminLogin extends javax.swing.JFrame {
                         .addGap(50, 50, 50)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(roundPanel1Layout.createSequentialGroup()
-                        .addGap(124, 124, 124)
-                        .addComponent(jImagePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(roundPanel1Layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addGroup(roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -139,15 +137,18 @@ public class AdminLogin extends javax.swing.JFrame {
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jTextField1)
                                 .addComponent(jPasswordField1)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(roundPanel1Layout.createSequentialGroup()
+                        .addGap(130, 130, 130)
+                        .addComponent(jImagePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
         roundPanel1Layout.setVerticalGroup(
             roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(roundPanel1Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jImagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(19, 19, 19)
+                .addGap(37, 37, 37)
+                .addComponent(jImagePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(jLabel7)
@@ -188,23 +189,24 @@ public class AdminLogin extends javax.swing.JFrame {
         if(username.isEmpty()){
             JOptionPane.showMessageDialog(this, "Please Enter Username", "Warning", JOptionPane.WARNING_MESSAGE);
         }else if(password.isEmpty()){
-            JOptionPane.showMessageDialog(this, "Please Enter Pasword", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please Enter Password", "Warning", JOptionPane.WARNING_MESSAGE);
         }else{
             try {
-                ResultSet resultSet = MySql.execute("SELECT * FROM `employee_login` INNER JOIN `employees` ON `employee_login`.`e_nic` = `employees`.`e_nic` WHERE `username` = '"+username+"' AND `password` = '"+password+"'");
+                ResultSet resultSet = MySql.execute("SELECT * FROM `employee_login` INNER JOIN `employees` ON `employee_login`.`e_nic`=`employees`.`e_nic` "
+                        + " WHERE `username` = '"+username+"' AND `password` = '"+password+"' AND `et_id`='1'");
                 if(resultSet.next()){
-                    String name = resultSet.getString("e_fname")+ " " + resultSet.getString("e_lname");
+                    String name = resultSet.getString("e_fname")+" "+resultSet.getString("e_lname");
                     
                     UserDetails user = new UserDetails();
                     user.setName(name);
                     user.setUsername(username);
                     
-                    AdminNavigator admin = new AdminNavigator(user);
-                    admin.setVisible(true);
-                    admin.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    AdminNavigator an = new AdminNavigator(user);
+                    an.setVisible(true);
+                    an.setExtendedState(JFrame.MAXIMIZED_BOTH);
                     this.dispose();
                 }else{
-                    JOptionPane.showMessageDialog(this, "Username Or Password Incorrect", "Warning", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Incorrect credentials or you weren't provided the authority to access!", "Warning", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
