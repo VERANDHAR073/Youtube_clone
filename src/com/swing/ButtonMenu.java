@@ -95,7 +95,7 @@ public class ButtonMenu extends JButton {
             int height = getHeight();
             Graphics2D g2 = (Graphics2D) grphcs.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setColor(new Color(175, 175, 175));
+            g2.setColor(new Color(102,102,102));
             g2.fillRoundRect(0, 0, width - 1, height - 1, 10, 10);
         }
         super.paint(grphcs);

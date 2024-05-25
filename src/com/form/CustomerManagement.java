@@ -11,8 +11,6 @@ public class CustomerManagement extends javax.swing.JPanel {
     public CustomerManagement() {
         initComponents();
         setOpaque(false);
-        FlatLightLaf.setup();
-
     }
 
     @SuppressWarnings("unchecked")

@@ -59,7 +59,7 @@ public class ViewAttendence extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
-        roundPanel1.setBackground(new java.awt.Color(102, 102, 102));
+        roundPanel1.setBackground(new java.awt.Color(71, 71, 71));
 
         jLabel5.setBackground(new java.awt.Color(255, 255, 255));
         jLabel5.setFont(new java.awt.Font("Quicksand", 1, 18)); // NOI18N

@@ -1,5 +1,6 @@
 package com.main;
 
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.main.AdminNavigator;
 import javax.swing.JOptionPane;
@@ -7,6 +8,7 @@ import java.sql.ResultSet;
 import javax.swing.JFrame;
 import com.model.MySql;
 import com.model.UserDetails;
+import javax.swing.UIManager;
 
 
 public class LoginNavigator extends javax.swing.JFrame {
@@ -14,6 +16,8 @@ public class LoginNavigator extends javax.swing.JFrame {
     public LoginNavigator() {
         initComponents();
         roundPanel1.setOpaque(true);
+        UIManager.put( "TextComponent.arc", 10 );
+        UIManager.put( "Button.arc", 10 );
     }
     
     @SuppressWarnings("unchecked")
@@ -194,7 +198,7 @@ public class LoginNavigator extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     public static void main(String args[]) {
-        FlatLightLaf.setup();
+        FlatMacDarkLaf.setup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 LoginNavigator login = new LoginNavigator();

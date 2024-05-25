@@ -1,16 +1,14 @@
 package com.form;
-import com.formdev.flatlaf.FlatLightLaf;
 import com.frams.BalanceSheet;
 import com.frams.Profit;
 import java.awt.Component;
+import javax.swing.UIManager;
 
 public class Reports extends javax.swing.JPanel {
 
     public Reports() {
         initComponents();
         setOpaque(false);
-        FlatLightLaf.setup();
-
     }
 
     private void showFrame(Component com) {

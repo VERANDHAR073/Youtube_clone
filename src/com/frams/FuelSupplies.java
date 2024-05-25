@@ -120,7 +120,7 @@ public class FuelSupplies extends javax.swing.JPanel {
         jLabel25 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
 
-        roundPanel2.setBackground(new java.awt.Color(102, 102, 102));
+        roundPanel2.setBackground(new java.awt.Color(71, 71, 71));
 
         jLabel13.setBackground(new java.awt.Color(255, 255, 255));
         jLabel13.setFont(new java.awt.Font("Quicksand", 1, 12)); // NOI18N

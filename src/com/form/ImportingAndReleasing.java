@@ -11,8 +11,6 @@ public class ImportingAndReleasing extends javax.swing.JPanel {
     public ImportingAndReleasing() {
         initComponents();
         setOpaque(false);
-        FlatLightLaf.setup();
-
     }
 
     private void showFrame(Component com) {

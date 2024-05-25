@@ -16,7 +16,7 @@ public class ReleaseSalary extends javax.swing.JPanel {
 
     private static HashMap<String, Integer> dateMap = new HashMap<>();
 
-    private String pumperId;
+    private String employeeId;
     private LocalDate selectedDate;
 
     public ReleaseSalary() {
@@ -29,13 +29,13 @@ public class ReleaseSalary extends javax.swing.JPanel {
 
     private void loadMonth() {
         try {
-            ResultSet resultSet = MySql.execute("SELECT * FROM `sa_month` ORDER BY `id` DESC");
+            ResultSet resultSet = MySql.execute("SELECT * FROM `es_month` ORDER BY `m_id` DESC");
             Vector fv = new Vector();
             fv.add("SELECT");
 
             while (resultSet.next()) {
                 fv.add(resultSet.getString("month"));
-                dateMap.put(resultSet.getString("month"), resultSet.getInt("id"));
+                dateMap.put(resultSet.getString("month"), resultSet.getInt("m_id"));
             }
 
             DefaultComboBoxModel cb = new DefaultComboBoxModel(fv);
@@ -47,20 +47,23 @@ public class ReleaseSalary extends javax.swing.JPanel {
 
     private void loadEmployees() {
         try {
-            ResultSet resultSet = MySql.execute("SELECT * FROM `pumpers`");
+            ResultSet resultSet = MySql.execute("SELECT * FROM `employees` INNER JOIN `employee_type` ON `employees`.`et_id` = `employee_type`.`et_id`");
 
             DefaultTableModel tm = (DefaultTableModel) jTable2.getModel();
             tm.setRowCount(0);
 
             while (resultSet.next()) {
-                Vector<String> pv = new Vector<>();
-                pv.add(resultSet.getString("per_id"));
-                pv.add(resultSet.getString("per_name"));
-                pv.add(resultSet.getString("contact"));
-                pv.add(resultSet.getString("daily_salary"));
+                if (resultSet.getInt("et_id") != 1) {
+                    Vector<String> pv = new Vector<>();
+                    pv.add(resultSet.getString("e_nic"));
+                    pv.add(resultSet.getString("e_fname") + " " + resultSet.getString("e_lname"));
+                    pv.add(resultSet.getString("e_contact"));
+                    pv.add(resultSet.getString("et_name"));
+                    pv.add(resultSet.getString("daily_salary"));
 
-                tm.addRow(pv);
-                jTable2.setModel(tm);
+                    tm.addRow(pv);
+                    jTable2.setModel(tm);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,17 +84,17 @@ public class ReleaseSalary extends javax.swing.JPanel {
                 int currentMonth = date.getMonthValue();
                 int currentYear = date.getYear();
 
-                int monthSalary = 0;
+                double monthSalary = 0.0;
 
-                ResultSet resultSet = MySql.execute("SELECT * FROM `pumpers` "
-                        + "WHERE `per_id` = '" + pumperId + "'");
+                ResultSet resultSet = MySql.execute("SELECT * FROM `employees` INNER JOIN `employee_type` ON `employees`.`et_id` = `employee_type`.`et_id`"
+                        + "WHERE `employees`.`e_nic` = '" + employeeId + "'");
                 resultSet.next();
-                jTextField2.setText(resultSet.getString("per_name"));
+                jTextField2.setText(resultSet.getString("e_fname") + " " + resultSet.getString("e_lname"));
                 jTextField3.setText(resultSet.getString("daily_salary"));
-                ResultSet resultAttendence = MySql.execute("SELECT * FROM `mark_attendence` INNER JOIN `attendence_date` ON `mark_attendence`.`attendence_date_d_id` = `attendence_date`.`d_id` INNER JOIN `pumpers` ON `mark_attendence`.`pumpers_per_id` = `pumpers`.`per_id` WHERE `pumpers_per_id` = '" + pumperId + "' AND MONTH(`date`) = '" + currentMonth + "' AND YEAR(`date`) = '" + currentYear + "'");
+                ResultSet resultAttendence = MySql.execute("SELECT * FROM `mark_attendance` INNER JOIN `employees` ON `mark_attendance`.`e_nic` = `employees`.`e_nic` INNER JOIN `employee_type` ON `employees`.`et_id` = `employee_type`.`et_id` INNER JOIN `attendance_status` ON `mark_attendance`.`as_id` = `attendance_status`.`as_id` WHERE `mark_attendance`.`e_nic` = '" + employeeId + "' AND MONTH(`ma_date`) = '" + currentMonth + "' AND YEAR(`ma_date`) = '" + currentYear + "'");
                 while (resultAttendence.next()) {
-                    if (resultAttendence.getInt("attendence_id") == 1) {
-                        monthSalary += resultAttendence.getInt("daily_salary");
+                    if (resultAttendence.getInt("as_id") == 1) {
+                        monthSalary += resultAttendence.getDouble("daily_salary");
                     }
                 }
                 jFormattedTextField1.setValue(monthSalary);
@@ -114,24 +117,25 @@ public class ReleaseSalary extends javax.swing.JPanel {
                 String date = String.valueOf(jComboBox1.getSelectedItem());
                 int dateId = dateMap.get(date);
 
-                ResultSet resultSet = MySql.execute("SELECT * FROM `employeesalary` INNER JOIN `pumpers` ON `employeesalary`.`pumpers_per_id` = `pumpers`.`per_id` WHERE `sa_month_id` = '" + dateId + "'");
+                ResultSet resultSet = MySql.execute("SELECT * FROM `employee_salary` INNER JOIN `employees` ON `employee_salary`.`e_nic` = `employees`.`e_nic` WHERE `m_id` = '" + dateId + "'");
 
                 DefaultTableModel tm = (DefaultTableModel) jTable3.getModel();
                 tm.setRowCount(0);
 
                 while (resultSet.next()) {
                     Vector<String> pv = new Vector<>();
-                    pv.add(resultSet.getString("sa_id"));
-                    pv.add(resultSet.getString("per_name"));
-                    pv.add(resultSet.getString("contact"));
-                    pv.add(resultSet.getString("sa_salary"));
-                    pv.add(resultSet.getString("sa_addons"));
-                    pv.add(resultSet.getString("totalSalary"));
+                    pv.add(resultSet.getString("es_id"));
+                    pv.add(resultSet.getString("e_fname") + " " + resultSet.getString("e_lname"));
+                    pv.add(resultSet.getString("e_contact"));
+                    pv.add(resultSet.getString("es_salary"));
+                    pv.add(resultSet.getString("es_addons"));
+                    pv.add(resultSet.getString("es_total"));
+                    pv.add(resultSet.getString("paid_date"));
 
                     tm.addRow(pv);
                     jTable3.setModel(tm);
                 }
-            }else{
+            } else {
                 DefaultTableModel tm = (DefaultTableModel) jTable3.getModel();
                 tm.setRowCount(0);
                 jTable3.setModel(tm);
@@ -177,7 +181,7 @@ public class ReleaseSalary extends javax.swing.JPanel {
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jFormattedTextField2 = new javax.swing.JFormattedTextField();
 
-        roundPanel1.setBackground(new java.awt.Color(102, 102, 102));
+        roundPanel1.setBackground(new java.awt.Color(71, 71, 71));
 
         jLabel5.setBackground(new java.awt.Color(255, 255, 255));
         jLabel5.setFont(new java.awt.Font("Quicksand", 1, 18)); // NOI18N
@@ -191,17 +195,17 @@ public class ReleaseSalary extends javax.swing.JPanel {
         jTable2.setForeground(new java.awt.Color(255, 255, 255));
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Id", "Name", "Contact", "Daily Salary"
+                "Id", "Name", "Contact", "Employee Type", "Daily Salary"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -221,6 +225,7 @@ public class ReleaseSalary extends javax.swing.JPanel {
             jTable2.getColumnModel().getColumn(1).setResizable(false);
             jTable2.getColumnModel().getColumn(2).setResizable(false);
             jTable2.getColumnModel().getColumn(3).setResizable(false);
+            jTable2.getColumnModel().getColumn(4).setResizable(false);
         }
 
         jComboBox1.setBackground(new java.awt.Color(102, 102, 102));
@@ -270,17 +275,17 @@ public class ReleaseSalary extends javax.swing.JPanel {
         jTable3.setForeground(new java.awt.Color(255, 255, 255));
         jTable3.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "Name", "Contact", "Salary", "Addons", "Total"
+                "Id", "Name", "Contact", "Salary", "Addons", "Total", "Paid Date"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -302,6 +307,7 @@ public class ReleaseSalary extends javax.swing.JPanel {
             jTable3.getColumnModel().getColumn(3).setResizable(false);
             jTable3.getColumnModel().getColumn(4).setResizable(false);
             jTable3.getColumnModel().getColumn(5).setResizable(false);
+            jTable3.getColumnModel().getColumn(6).setResizable(false);
         }
 
         jLabel9.setBackground(new java.awt.Color(255, 255, 255));
@@ -491,8 +497,8 @@ public class ReleaseSalary extends javax.swing.JPanel {
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
         if (evt.getClickCount() == 2) {
             int selectedRow = jTable2.getSelectedRow();
-            String pumperID = String.valueOf(jTable2.getValueAt(selectedRow, 0));
-            pumperId = pumperID;
+            String employeeId = String.valueOf(jTable2.getValueAt(selectedRow, 0));
+            this.employeeId = employeeId;
             loadEmployeeDetails();
         }
     }//GEN-LAST:event_jTable2MouseClicked
@@ -532,10 +538,9 @@ public class ReleaseSalary extends javax.swing.JPanel {
                 totalSalary = Double.valueOf(salary);
             }
 
-            ResultSet resultSet = MySql.execute("SELECT * FROM `employeesalary` WHERE `pumpers_per_id` = '" + pumperId + "' AND `sa_month_id` = '" + dateId + "'");
+            ResultSet resultSet = MySql.execute("SELECT * FROM `employee_salary` WHERE `e_nic` = '" + employeeId + "' AND `m_id` = '" + dateId + "'");
             if (!resultSet.next()) {
-                MySql.execute("INSERT INTO `employeesalary` (`sa_salary`,`sa_addons`,`totalSalary`,`paid_date`,`pumpers_per_id`,`sa_month_id`) VALUES('" + Double.valueOf(salary) + "','" + Double.valueOf(addons) + "','" + totalSalary + "','" + todayDate + "','" + pumperId + "','" + dateId + "')");
-                MySql.execute("INSERT INTO `expense_details` (`date`,`amount`,`expense_ex_id`) VALUES('" + todayDate + "','" + totalSalary + "','3')");
+                MySql.execute("INSERT INTO `employee_salary` (`es_salary`,`es_addons`,`es_total`,`paid_date`,`e_nic`,`m_id`) VALUES('" + Double.valueOf(salary) + "','" + Double.valueOf(addons) + "','" + totalSalary + "','" + todayDate + "','" + employeeId + "','" + dateId + "')");
                 clear();
                 loadSalaryStatus();
             } else {

@@ -157,7 +157,7 @@ public class BalanceSheet extends javax.swing.JPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
 
-        roundPanel1.setBackground(new java.awt.Color(102, 102, 102));
+        roundPanel1.setBackground(new java.awt.Color(71, 71, 71));
 
         jLabel5.setBackground(new java.awt.Color(255, 255, 255));
         jLabel5.setFont(new java.awt.Font("Quicksand", 1, 18)); // NOI18N

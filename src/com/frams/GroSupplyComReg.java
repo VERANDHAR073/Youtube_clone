@@ -2,37 +2,35 @@ package com.frams;
 
 import java.awt.Color;
 import java.sql.ResultSet;
-import java.util.HashMap;
 import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
 
-public class SuppliersReg extends javax.swing.JPanel {
-    
-    private String supplierId;
+public class GroSupplyComReg extends javax.swing.JPanel {
 
-    public SuppliersReg() {
+    private String companyId;
+
+    public GroSupplyComReg() {
         initComponents();
         setOpaque(false);
         setBackground(new Color(0, 0, 0, 0));
-        loadImpoters();
+        loadCompany();
         jButton3.setVisible(false);
     }
-    
-    private void loadImpoters() {
+
+    private void loadCompany() {
         try {
-            ResultSet resultSet = MySql.execute("SELECT * FROM `suppliers`");
+            ResultSet resultSet = MySql.execute("SELECT * FROM `company`");
 
             DefaultTableModel comTable = (DefaultTableModel) jTable2.getModel();
             comTable.setRowCount(0);
 
             while (resultSet.next()) {
                 Vector<String> cv = new Vector();
-                cv.add(resultSet.getString("su_id"));
-                cv.add(resultSet.getString("su_name"));
-                cv.add(resultSet.getString("su_contact"));
+                cv.add(resultSet.getString("co_id"));
+                cv.add(resultSet.getString("co_name"));
+                cv.add(resultSet.getString("co_contact"));
 
                 comTable.addRow(cv);
                 jTable2.setModel(comTable);
@@ -41,30 +39,15 @@ public class SuppliersReg extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
-    
+
     private void clean() {
         jTextField1.setText("");
         jTextField3.setText("");
         jButton2.setVisible(true);
         jButton3.setVisible(false);
+        loadCompany();
     }
-    
-    private void loadImporterDetail() {
-        try {
-            ResultSet resultSet = MySql.execute("SELECT * FROM `suppliers` WHERE `su_id` = '" + supplierId + "'");
-            resultSet.next();
-            clean();
-            jTextField1.setText(resultSet.getString("su_name"));
-            jTextField3.setText(resultSet.getString("su_contact"));
-            jButton2.setVisible(false);
-            jButton3.setVisible(true);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -87,7 +70,7 @@ public class SuppliersReg extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Quicksand", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel5.setText("Suppliers Register");
+        jLabel5.setText("Grocery Supply Company Register");
         jLabel5.setToolTipText("");
 
         jButton1.setBackground(new java.awt.Color(51, 51, 51));
@@ -138,7 +121,7 @@ public class SuppliersReg extends javax.swing.JPanel {
                 {null, null, null}
             },
             new String [] {
-                "Id", "Name", "Contact"
+                "Id", "Company Name", "Contact"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -194,7 +177,6 @@ public class SuppliersReg extends javax.swing.JPanel {
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(roundPanel1Layout.createSequentialGroup()
                                 .addGroup(roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -202,8 +184,9 @@ public class SuppliersReg extends javax.swing.JPanel {
                                 .addGap(48, 48, 48)
                                 .addGroup(roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(383, Short.MAX_VALUE))))
         );
         roundPanel1Layout.setVerticalGroup(
             roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -245,9 +228,13 @@ public class SuppliersReg extends javax.swing.JPanel {
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
         if (evt.getClickCount() == 2) {
             int selectedRow = jTable2.getSelectedRow();
-            String supplierId = String.valueOf(jTable2.getValueAt(selectedRow, 0));
-            this.supplierId = supplierId;
-            loadImporterDetail();
+            String companyId = String.valueOf(jTable2.getValueAt(selectedRow, 0));
+            this.companyId = companyId;
+            clean();
+            jTextField1.setText(String.valueOf(jTable2.getValueAt(selectedRow, 1)));
+            jTextField3.setText(String.valueOf(jTable2.getValueAt(selectedRow, 2)));
+            jButton2.setVisible(false);
+            jButton3.setVisible(true);
         }
     }//GEN-LAST:event_jTable2MouseClicked
 
@@ -263,9 +250,8 @@ public class SuppliersReg extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Please Enter Valid Contact", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
             try {
-                MySql.execute("INSERT INTO `suppliers` (`su_name`,`su_contact`) VALUES('"+name+"','"+comContact+"')");
+                MySql.execute("INSERT INTO `company` (`co_name`,`co_contact`) VALUES('" + name + "','" + comContact + "')");
                 clean();
-                loadImpoters();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -283,11 +269,10 @@ public class SuppliersReg extends javax.swing.JPanel {
         } else if (!comContact.matches("0[137][01245678]{1}[0-9]{7}$")) {
             JOptionPane.showMessageDialog(this, "Please Enter Valid Contact", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
-            
+
             try {
-                MySql.execute("UPDATE `suppliers` SET `su_name` = '"+name+"',`su_contact` = '"+comContact+"' WHERE `su_id` = '"+supplierId+"'");
+                MySql.execute("UPDATE `company` SET `co_name` = '" + name + "',`co_contact` = '" + comContact + "' WHERE `co_id` = '" + companyId + "'");
                 clean();
-                loadImpoters();
             } catch (Exception e) {
                 e.printStackTrace();
             }

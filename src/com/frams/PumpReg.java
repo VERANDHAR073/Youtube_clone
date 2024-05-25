@@ -118,7 +118,7 @@ public class PumpReg extends javax.swing.JPanel {
         jButton6 = new javax.swing.JButton();
         jTextField2 = new javax.swing.JTextField();
 
-        roundPanel1.setBackground(new java.awt.Color(102, 102, 102));
+        roundPanel1.setBackground(new java.awt.Color(71, 71, 71));
 
         jLabel8.setBackground(new java.awt.Color(255, 255, 255));
         jLabel8.setFont(new java.awt.Font("Quicksand", 1, 18)); // NOI18N
