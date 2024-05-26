@@ -17,7 +17,6 @@ public class DailyRelease extends javax.swing.JPanel {
 
     private static HashMap<String, Integer> pumpMap = new HashMap<>();
     private static HashMap<String, String> employeeMap = new HashMap<>();
-    
 
     private Double totalSales;
 
@@ -54,8 +53,8 @@ public class DailyRelease extends javax.swing.JPanel {
             fv.add("SELECT");
 
             while (resultSet.next()) {
-                fv.add(resultSet.getString("e_fname")+ " "+ resultSet.getString("e_lname"));
-                employeeMap.put(resultSet.getString("e_fname")+ " "+ resultSet.getString("e_lname"), resultSet.getString("e_nic"));
+                fv.add(resultSet.getString("e_fname") + " " + resultSet.getString("e_lname"));
+                employeeMap.put(resultSet.getString("e_fname") + " " + resultSet.getString("e_lname"), resultSet.getString("e_nic"));
             }
 
             DefaultComboBoxModel cb = new DefaultComboBoxModel(fv);
@@ -64,13 +63,16 @@ public class DailyRelease extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
-    
 
     private void loadRealseData() {
         try {
+            LocalDate d = LocalDate.now();
+            DateTimeFormatter f = DateTimeFormatter.ofPattern("MM");
+            String month = d.format(f);
+            
             ResultSet resultSet = MySql.execute("SELECT * FROM `release` "
                     + "INNER JOIN `employees` ON `release`.`e_nic` = `employees`.`e_nic` "
-                    + "INNER JOIN `pumps` ON `release`.`pu_id` = `pumps`.`pu_id`");
+                    + "INNER JOIN `pumps` ON `release`.`pu_id` = `pumps`.`pu_id` WHERE MONTH(`r_date`) = '"+month+"'");
 
             DefaultTableModel tmodel = (DefaultTableModel) jTable2.getModel();
             tmodel.setRowCount(0);
@@ -78,7 +80,7 @@ public class DailyRelease extends javax.swing.JPanel {
             while (resultSet.next()) {
                 Vector<String> fv = new Vector<>();
                 fv.add(resultSet.getString("r_id"));
-                fv.add(resultSet.getString("e_fname")+ " "+ resultSet.getString("e_lname"));
+                fv.add(resultSet.getString("e_fname") + " " + resultSet.getString("e_lname"));
                 fv.add(resultSet.getString("pu_name"));
                 fv.add(resultSet.getString("r_date"));
                 fv.add(resultSet.getString("r_qty"));
@@ -400,7 +402,7 @@ public class DailyRelease extends javax.swing.JPanel {
         Double liters = Double.valueOf(jFormattedTextField1.getText());
         String total = String.valueOf(jFormattedTextField2.getText());
 
-        if (date == null) { 
+        if (date == null) {
             JOptionPane.showMessageDialog(this, "Please Select Date", "Warning", JOptionPane.WARNING_MESSAGE);
         } else if (pump == "SELECT") {
             JOptionPane.showMessageDialog(this, "Please Select Pump", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -417,11 +419,11 @@ public class DailyRelease extends javax.swing.JPanel {
             if (!total.isEmpty()) {
                 try {
                     ResultSet resultSet = MySql.execute("SELECT * FROM `release` WHERE `r_date` = '" + formatedDate + "' AND `pu_id` = '" + pumpId + "'");
-                    ResultSet pumpSet = MySql.execute("SELECT * FROM `pumps` WHERE `pu_id` = '"+pumpId+"'");
+                    ResultSet pumpSet = MySql.execute("SELECT * FROM `pumps` WHERE `pu_id` = '" + pumpId + "'");
                     pumpSet.next();
                     if (!resultSet.next()) {
                         MySql.execute("INSERT INTO `release` (`pu_id`,`r_date`,`e_nic`,`r_qty`,`r_total`) VALUES('" + pumpId + "','" + formatedDate + "','" + emloyeeId + "','" + liters + "','" + totalSales + "')");
-                        MySql.execute("UPDATE `fuel` SET `fu_qty` = `fu_qty` - '"+liters+"' WHERE `fu_id` = '"+pumpSet.getInt("fu_id")+"'");
+                        MySql.execute("UPDATE `fuel` SET `fu_qty` = `fu_qty` - '" + liters + "' WHERE `fu_id` = '" + pumpSet.getInt("fu_id") + "'");
                         clearRelease();
                         loadRealseData();
                     } else {
