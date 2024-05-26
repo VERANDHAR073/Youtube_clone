@@ -17,6 +17,30 @@ public class Home extends javax.swing.JPanel {
         incomeExpenses();
         fualQuantity();
         loadMonth();
+        menuDetailsLoad();
+    }
+    
+    private void menuDetailsLoad(){
+        double salesToday = 0.0;
+        int itemQty = 0;
+        try {
+            ResultSet salesSet = MySql.execute("SELECT * FROM `invoice` INNER JOIN `invoice_item` ON `invoice`.`in_id` = `invoice_item`.`in_id` WHERE DATE(`date_time`) = CURDATE()");
+            while(salesSet.next()){
+                salesToday += salesSet.getDouble("paid_amount");
+                itemQty += salesSet.getInt("ii_qty");
+            }
+            
+            jLabel18.setText("Rs."+salesToday);
+            jLabel15.setText(itemQty + " Items");
+            
+            ResultSet resultSet = MySql.execute("SELECT COUNT(`e_nic`) AS numOfEmployees FROM `employees` WHERE `e_status` = '1'");
+            if(resultSet.next()){
+                jLabel28.setText(resultSet.getString("numOfEmployees")+" Employees");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
     }
 
     private void incomeExpenses() {
@@ -393,14 +417,12 @@ public class Home extends javax.swing.JPanel {
             .addGroup(roundPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(roundPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(roundPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel17)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel17)
                     .addGroup(roundPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         roundPanel4Layout.setVerticalGroup(
             roundPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -436,12 +458,14 @@ public class Home extends javax.swing.JPanel {
             .addGroup(roundPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(roundPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel20)
+                    .addGroup(roundPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel20)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(roundPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel18)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         roundPanel5Layout.setVerticalGroup(
             roundPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -453,7 +477,7 @@ public class Home extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(roundPanel5Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
+                        .addGap(27, 27, 27)
                         .addComponent(jLabel18)))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
@@ -477,12 +501,14 @@ public class Home extends javax.swing.JPanel {
             .addGroup(roundPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(roundPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel30)
+                    .addGroup(roundPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel30)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(roundPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel28)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                        .addComponent(jLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         roundPanel6Layout.setVerticalGroup(
             roundPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -534,7 +560,7 @@ public class Home extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(roundPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1224, Short.MAX_VALUE)
+                    .addComponent(roundPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(roundPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)

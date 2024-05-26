@@ -7,6 +7,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 
 public class EmployeeReg extends javax.swing.JPanel {
@@ -19,13 +21,14 @@ public class EmployeeReg extends javax.swing.JPanel {
         setOpaque(false);
         setBackground(new Color(0, 0, 0, 0));
         jButton3.setVisible(false);
+        jButton4.setVisible(false);
         loadPumpers();
         loadEmployeeType();
     }
 
     private void loadPumpers() {
         try {
-            ResultSet resultSet = MySql.execute("SELECT * FROM `employees` INNER JOIN `employee_type` ON `employees`.`et_id` = `employee_type`.`et_id`");
+            ResultSet resultSet = MySql.execute("SELECT * FROM `employees` INNER JOIN `employee_type` ON `employees`.`et_id` = `employee_type`.`et_id` WHERE `e_status` = '1'");
 
             DefaultTableModel comTable = (DefaultTableModel) jTable2.getModel();
             comTable.setRowCount(0);
@@ -56,6 +59,8 @@ public class EmployeeReg extends javax.swing.JPanel {
         jButton3.setVisible(false);
         jButton2.setVisible(true);
         jTextField2.setEnabled(true);
+        jButton4.setVisible(false);
+        loadPumpers();
     }
 
     private void loadEmployeeType() {
@@ -74,45 +79,6 @@ public class EmployeeReg extends javax.swing.JPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void loadEmployeeType(String typeId) {
-        try {
-            ResultSet resultSet = MySql.execute("SELECT * FROM `employee_type`");
-            Vector fv = new Vector();
-            fv.add("SELECT");
-
-            while (resultSet.next()) {
-                fv.add(resultSet.getString("et_name"));
-                employeeTypeMap.put(resultSet.getString("et_name"), resultSet.getInt("et_id"));
-            }
-
-            DefaultComboBoxModel cb = new DefaultComboBoxModel(fv);
-            jComboBox1.setModel(cb);
-            jComboBox1.setSelectedIndex(Integer.parseInt(typeId));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void loadPumperDetails() {
-        try {
-            ResultSet resultSet = MySql.execute("SELECT * FROM `employees` INNER JOIN `employee_type` ON `employees`.`et_id` = `employee_type`.`et_id` WHERE `e_nic` = '" + employeeId + "'");
-            resultSet.next();
-            clean();
-            jTextField2.setEnabled(false);
-            jTextField2.setText(resultSet.getString("e_nic"));
-            jTextField1.setText(resultSet.getString("e_fname"));
-            jTextField3.setText(resultSet.getString("e_lname"));
-            jTextField4.setText(resultSet.getString("e_contact"));
-            loadEmployeeType(resultSet.getString("et_id"));
-            jButton2.setVisible(false);
-            jButton3.setVisible(true);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     @SuppressWarnings("unchecked")
@@ -136,6 +102,7 @@ public class EmployeeReg extends javax.swing.JPanel {
         jLabel10 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
 
         roundPanel1.setBackground(new java.awt.Color(71, 71, 71));
 
@@ -238,7 +205,7 @@ public class EmployeeReg extends javax.swing.JPanel {
         jButton3.setBackground(new java.awt.Color(51, 51, 51));
         jButton3.setFont(new java.awt.Font("Quicksand", 1, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Save Edit");
+        jButton3.setText("Edit");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -273,6 +240,16 @@ public class EmployeeReg extends javax.swing.JPanel {
         jLabel8.setText("NIC");
         jLabel8.setToolTipText("");
 
+        jButton4.setBackground(new java.awt.Color(51, 51, 51));
+        jButton4.setFont(new java.awt.Font("Quicksand", 1, 12)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(255, 255, 255));
+        jButton4.setText("Delete");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout roundPanel1Layout = new javax.swing.GroupLayout(roundPanel1);
         roundPanel1.setLayout(roundPanel1Layout);
         roundPanel1Layout.setHorizontalGroup(
@@ -290,7 +267,9 @@ public class EmployeeReg extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(roundPanel1Layout.createSequentialGroup()
                                 .addGroup(roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -348,7 +327,8 @@ public class EmployeeReg extends javax.swing.JPanel {
                 .addGroup(roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(100, 100, 100))
         );
 
@@ -373,7 +353,16 @@ public class EmployeeReg extends javax.swing.JPanel {
             int selectedRow = jTable2.getSelectedRow();
             String employeeId = String.valueOf(jTable2.getValueAt(selectedRow, 0));
             this.employeeId = employeeId;
-            loadPumperDetails();
+            clean();
+            jButton4.setVisible(true);
+            jTextField2.setEnabled(false);
+            jTextField2.setText(employeeId);
+            jTextField1.setText(String.valueOf(jTable2.getValueAt(selectedRow, 1)));
+            jTextField3.setText(String.valueOf(jTable2.getValueAt(selectedRow, 2)));
+            jTextField4.setText(String.valueOf(jTable2.getValueAt(selectedRow, 4)));
+            jComboBox1.setSelectedItem(String.valueOf(jTable2.getValueAt(selectedRow, 3)));
+            jButton2.setVisible(false);
+            jButton3.setVisible(true);
         }
     }//GEN-LAST:event_jTable2MouseClicked
 
@@ -401,8 +390,7 @@ public class EmployeeReg extends javax.swing.JPanel {
                 int typeId = employeeTypeMap.get(type);
                 ResultSet resultSet = MySql.execute("SELECT * FROM `employees` WHERE `e_nic` = '" + nic + "'");
                 if (!resultSet.next()) {
-                    MySql.execute("INSERT INTO `employees` (`e_nic`,`e_fname`,`e_lname`,`e_contact`,`et_id`) VALUES('" + nic + "','" + fname + "','" + lname + "','" + contact + "','" + typeId + "')");
-                    loadPumpers();
+                    MySql.execute("INSERT INTO `employees` (`e_nic`,`e_fname`,`e_lname`,`e_contact`,`et_id`,`e_status`) VALUES('" + nic + "','" + fname + "','" + lname + "','" + contact + "','" + typeId + "','1')");
                     clean();
                 } else {
                     JOptionPane.showMessageDialog(this, "Already Registered This Employee", "Warning", JOptionPane.ERROR_MESSAGE);
@@ -416,6 +404,7 @@ public class EmployeeReg extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         clean();
+        employeeId = null;
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -441,8 +430,8 @@ public class EmployeeReg extends javax.swing.JPanel {
             try {
                 int typeId = employeeTypeMap.get(type);
                 MySql.execute("UPDATE `employees` SET `e_nic` = '" + nic + "', `e_fname` = '" + fname + "',`e_lname` = '" + lname + "', `e_contact` = '" + contact + "', `et_id` = '" + typeId + "' WHERE `e_nic` = '" + employeeId + "'");
-                loadPumpers();
                 clean();
+                employeeId = null;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -453,11 +442,27 @@ public class EmployeeReg extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        if (employeeId != null) {
+            int selectOption = JOptionPane.showConfirmDialog(roundPanel1, "Are you sure about deleting emplooyee ( nic - '"+employeeId+"' )", "Confirm", JOptionPane.YES_NO_OPTION);
+            if (selectOption == JOptionPane.YES_OPTION) {
+                try {
+                    MySql.execute("UPDATE `employees` SET `e_status` = '0' WHERE `e_nic` = '" + employeeId + "'");
+                    clean();
+                    employeeId = null;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
