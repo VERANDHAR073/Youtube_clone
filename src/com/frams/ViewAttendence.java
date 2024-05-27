@@ -1,5 +1,6 @@
 package com.frams;
 
+import com.model.Logs;
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.util.Vector;
@@ -8,9 +9,9 @@ import com.model.MySql;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
@@ -22,6 +23,7 @@ public class ViewAttendence extends javax.swing.JPanel {
         initComponents();
         setOpaque(false);
         setBackground(new Color(0, 0, 0, 0));
+        jButton2.setEnabled(false);
     }
 
     private void loadAttendance() {
@@ -166,7 +168,7 @@ public class ViewAttendence extends javax.swing.JPanel {
                 .addGroup(roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, roundPanel1Layout.createSequentialGroup()
                         .addGroup(roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 924, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, roundPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))
@@ -178,7 +180,7 @@ public class ViewAttendence extends javax.swing.JPanel {
                         .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 562, Short.MAX_VALUE)
                         .addComponent(jButton2)
                         .addGap(31, 31, 31))))
         );
@@ -204,9 +206,7 @@ public class ViewAttendence extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(roundPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 123, Short.MAX_VALUE))
+            .addComponent(roundPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,6 +231,11 @@ public class ViewAttendence extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (jDateChooser1.getDate() != null) {
             loadAttendance();
+            if(jTable2.getRowCount() > 0){
+                jButton2.setEnabled(true);
+            }else{
+                jButton2.setEnabled(false);
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Please Select Date", "Warning", JOptionPane.ERROR_MESSAGE);
         }
@@ -240,22 +245,26 @@ public class ViewAttendence extends javax.swing.JPanel {
         try {
             Date date = jDateChooser1.getDate();
             if (date != null) {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                String formatedDate = format.format(date);
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("date", formatedDate);
+                if (jTable2.getRowCount() > 0) {
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    String formatedDate = format.format(date);
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("date", formatedDate);
 
-                String reportPath = "src/com/Reports/attendanceReport.jasper";
-                JRDataSource dataSource = new JRTableModelDataSource(jTable2.getModel());
+                    String reportPath = "src/com/Reports/attendanceReport.jasper";
+                    JRDataSource dataSource = new JRTableModelDataSource(jTable2.getModel());
 
-                JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, map, dataSource);
-                JasperViewer.viewReport(jasperPrint, false);
-            }else{
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, map, dataSource);
+                    JasperViewer.viewReport(jasperPrint, false);
+                }
+            } else {
                 JOptionPane.showMessageDialog(this, "Please Select Date", "Warning", JOptionPane.WARNING_MESSAGE);
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Logs logs = new Logs();
+            logs.logger.log(Level.WARNING, "Attendance Report Generate Fail");
+            logs.logger.log(Level.WARNING, String.valueOf(e));
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 

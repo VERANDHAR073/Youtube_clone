@@ -1,12 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package com.main;
 
-import com.formdev.flatlaf.FlatLightLaf;
-import com.formdev.flatlaf.themes.FlatMacDarkLaf;
-//import java.awt.geom.RoundRectangle2D;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 /**
  *
@@ -14,15 +9,8 @@ import com.formdev.flatlaf.themes.FlatMacDarkLaf;
  */
 public class Splash extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Splash
-     */
     public Splash() {
         initComponents();
-        
-        
-//        setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 20, 29));
-        
         
         Thread t = new Thread(
             ()->{
@@ -133,7 +121,7 @@ public class Splash extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        FlatMacDarkLaf.setup();
+        FlatMacLightLaf.setup();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

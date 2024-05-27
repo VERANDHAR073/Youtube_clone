@@ -3,7 +3,6 @@ package com.main;
 
 import com.form.FuelProductManagement;
 import com.form.FuelStockManagement;
-import com.form.Home;
 import com.model.UserDetails;
 import com.swing.ButtonMenu;
 import java.awt.Color;
@@ -16,7 +15,7 @@ public class FuelStationNavigator extends javax.swing.JFrame {
         initComponents();
         setBackground(new Color(0, 0, 0, 0));
         roundPanel1.setOpaque(true);
-        user.loadUserDetails(userDetails.getName(),userDetails.getUserType());
+        user.loadUserDetails(userDetails.getName(),userDetails.getUserType(),userDetails.getUserTypeId());
         showForm(new FuelProductManagement());
         setSelected(buttonMenu4);
     }

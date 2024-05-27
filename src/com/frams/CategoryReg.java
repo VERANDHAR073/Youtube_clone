@@ -1,5 +1,6 @@
 package com.frams;
 
+import com.model.Logs;
 import java.sql.ResultSet;
 import java.awt.Color;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
+import java.util.logging.Level;
 
 public class CategoryReg extends javax.swing.JPanel {
 
@@ -216,7 +218,9 @@ public class CategoryReg extends javax.swing.JPanel {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Category Register Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -225,7 +229,7 @@ public class CategoryReg extends javax.swing.JPanel {
         if (evt.getClickCount() == 2) {
             int selectedRow = jTable1.getSelectedRow();
             String categoryId = String.valueOf(jTable1.getValueAt(selectedRow, 0));
-            this.categoryId = categoryId ;
+            this.categoryId = categoryId;
             clear();
             jTextField1.setText(String.valueOf(jTable1.getValueAt(selectedRow, 1)));
             jButton5.setVisible(true);
@@ -241,11 +245,13 @@ public class CategoryReg extends javax.swing.JPanel {
         } else {
             try {
 
-                MySql.execute("UPDATE `category` SET `category` = '"+name+"' WHERE `c_id` = '"+categoryId+"'");
+                MySql.execute("UPDATE `category` SET `category` = '" + name + "' WHERE `c_id` = '" + categoryId + "'");
                 clear();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Category Register Update Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton5ActionPerformed

@@ -1,13 +1,13 @@
 package com.frams;
 
+import com.model.Logs;
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -21,6 +21,7 @@ public class ViewReleasing extends javax.swing.JPanel {
         initComponents();
         setOpaque(false);
         setBackground(new Color(0, 0, 0, 0));
+        jButton2.setEnabled(false);
     }
 
     private void loadRealseData() {
@@ -209,6 +210,11 @@ public class ViewReleasing extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Please Select Month", "Warning", JOptionPane.ERROR_MESSAGE);
         } else {
             loadRealseData();
+            if (jTable2.getRowCount() > 0) {
+                jButton2.setEnabled(true);
+            } else {
+                jButton2.setEnabled(false);
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -223,7 +229,7 @@ public class ViewReleasing extends javax.swing.JPanel {
             if (year != "") {
                 if (month != "") {
                     HashMap<String, Object> map = new HashMap<>();
-                    map.put("month", year+" - "+month);
+                    map.put("month", year + " - " + month);
 
                     String reportPath = "src/com/Reports/releasingReport.jasper";
                     JRDataSource dataSource = new JRTableModelDataSource(jTable2.getModel());
@@ -237,7 +243,9 @@ public class ViewReleasing extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Please Select a Year", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logs logs = new Logs();
+            logs.logger.log(Level.WARNING, "Fuel Release Report Generate Fail");
+            logs.logger.log(Level.WARNING, String.valueOf(e));
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 

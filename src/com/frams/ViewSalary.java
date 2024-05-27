@@ -1,11 +1,13 @@
 package com.frams;
 
+import com.model.Logs;
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
 import java.util.HashMap;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRDataSource;
@@ -250,7 +252,9 @@ public class ViewSalary extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Please Select a month", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logs logs = new Logs();
+            logs.logger.log(Level.WARNING, "Salary Report Generate Fail");
+            logs.logger.log(Level.WARNING, String.valueOf(e));
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 

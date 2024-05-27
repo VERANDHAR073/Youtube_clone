@@ -13,14 +13,17 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 
 public class GroceryNavigator extends javax.swing.JFrame {
+    
+    private UserDetails userDetails;
 
     public GroceryNavigator(UserDetails userDetails) {
         initComponents();
         setBackground(new Color(0, 0, 0, 0));
         roundPanel1.setOpaque(true);
-        user.loadUserDetails(userDetails.getName(),userDetails.getUserType());
-        showForm(new PosAndInvoicing());
+        user.loadUserDetails(userDetails.getName(),userDetails.getUserType(),userDetails.getUserTypeId());
+        showForm(new PosAndInvoicing(userDetails));
         setSelected(buttonMenu2);
+        this.userDetails = userDetails;
     }
 
     private void showForm(Component com) {
@@ -249,7 +252,7 @@ public class GroceryNavigator extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonMenu2ActionPerformed
-        showForm(new PosAndInvoicing());
+        showForm(new PosAndInvoicing(userDetails));
         setSelected(buttonMenu2);
     }//GEN-LAST:event_buttonMenu2ActionPerformed
 
@@ -269,7 +272,7 @@ public class GroceryNavigator extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonMenu5ActionPerformed
 
     private void buttonMenu7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonMenu7ActionPerformed
-        showForm(new Grn());
+        showForm(new Grn(userDetails));
         setSelected(buttonMenu7);
     }//GEN-LAST:event_buttonMenu7ActionPerformed
 

@@ -1,6 +1,6 @@
 package com.frams;
 
-import com.form.*;
+import com.model.Logs;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -10,6 +10,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
+import java.util.logging.Level;
 
 public class FuelSupplies extends javax.swing.JPanel {
 
@@ -396,7 +397,9 @@ public class FuelSupplies extends javax.swing.JPanel {
                 clearImports();
                 loadImports();
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Fuel Supplier Register Insert Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
 

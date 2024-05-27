@@ -1,5 +1,6 @@
 package com.frams;
 
+import com.model.Logs;
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.util.Vector;
@@ -8,7 +9,7 @@ import com.model.MySql;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import javax.swing.JOptionPane;
+import java.util.logging.Level;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -178,7 +179,9 @@ public class ViewEmployeeReport extends javax.swing.JPanel {
             JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, map, dataSource);
             JasperViewer.viewReport(jasperPrint, false);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logs logs = new Logs();
+            logs.logger.log(Level.WARNING, "Employee Report Genarate Fail");
+            logs.logger.log(Level.WARNING, String.valueOf(e));
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 

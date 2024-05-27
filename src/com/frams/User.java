@@ -4,6 +4,7 @@
  */
 package com.frams;
 
+
 /**
  *
  * @author sanar
@@ -15,10 +16,17 @@ public class User extends javax.swing.JPanel {
         initComponents();
     }
     
-    public void loadUserDetails(String name,String type){
+    public void loadUserDetails(String name,String type,int tId){
         jLabel1.setText(name);
         jLabel2.setText(type);
-        
+        if(tId == 1){
+            jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/icon/adminLogo.png")));
+        }else if(tId == 2){
+            jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/icon/FuelLogo.png")));
+        }else if(tId == 3){
+            jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/icon/groceryLogo.png")));
+        }
+        System.out.println(type);
     }
 
     /**

@@ -9,9 +9,29 @@ package com.model;
  * @author sanar
  */
 public class UserDetails {
+
     private String name;
+    private String nic;
     private String username;
     private String userType;
+    private int userTypeId;
+
+    public void setNic(String nic) {
+        this.nic = nic;
+    }
+
+    public int getUserTypeId() {
+        return userTypeId;
+    }
+   
+
+    public String getNic() {
+        return nic;
+    }
+
+    public void setUserTypeId(int userTypeId) {
+        this.userTypeId = userTypeId;
+    }
 
     public void setName(String name) {
         this.name = name;

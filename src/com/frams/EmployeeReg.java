@@ -1,5 +1,6 @@
 package com.frams;
 
+import com.model.Logs;
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.util.Vector;
@@ -8,7 +9,6 @@ import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
 import java.util.HashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 
 public class EmployeeReg extends javax.swing.JPanel {
@@ -397,7 +397,9 @@ public class EmployeeReg extends javax.swing.JPanel {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Employee Register Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -433,7 +435,9 @@ public class EmployeeReg extends javax.swing.JPanel {
                 clean();
                 employeeId = null;
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Employee Update Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -444,14 +448,16 @@ public class EmployeeReg extends javax.swing.JPanel {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         if (employeeId != null) {
-            int selectOption = JOptionPane.showConfirmDialog(roundPanel1, "Are you sure about deleting emplooyee ( nic - '"+employeeId+"' )", "Confirm", JOptionPane.YES_NO_OPTION);
+            int selectOption = JOptionPane.showConfirmDialog(roundPanel1, "Are you sure about deleting emplooyee ( nic - '" + employeeId + "' )", "Confirm", JOptionPane.YES_NO_OPTION);
             if (selectOption == JOptionPane.YES_OPTION) {
                 try {
                     MySql.execute("UPDATE `employees` SET `e_status` = '0' WHERE `e_nic` = '" + employeeId + "'");
                     clean();
                     employeeId = null;
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    Logs logs = new Logs();
+                    logs.logger.log(Level.WARNING, "Employee Delete Fail");
+                    logs.logger.log(Level.WARNING, String.valueOf(ex));
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.frams;
 
+import com.model.Logs;
 import java.sql.ResultSet;
 import java.awt.Color;
 import java.util.HashMap;
@@ -7,11 +8,12 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
+import java.util.logging.Level;
 
 public class EmployeeTypeReg extends javax.swing.JPanel {
 
     private String employeeTypeId;
-    private static HashMap<String,Integer> fualMap = new HashMap<>();
+    private static HashMap<String, Integer> fualMap = new HashMap<>();
 
     public EmployeeTypeReg() {
         initComponents();
@@ -20,7 +22,7 @@ public class EmployeeTypeReg extends javax.swing.JPanel {
         jButton6.setVisible(false);
         loadEmployeeTypes();
     }
-    
+
     private void clear() {
         jTextField2.setText("");
         jFormattedTextField1.setText("");
@@ -28,20 +30,20 @@ public class EmployeeTypeReg extends javax.swing.JPanel {
         jButton3.setVisible(true);
         loadEmployeeTypes();
     }
-    
-    private void loadEmployeeTypes(){
+
+    private void loadEmployeeTypes() {
         try {
             ResultSet resultSet = MySql.execute("SELECT * FROM `employee_type`");
-            
+
             DefaultTableModel tm = (DefaultTableModel) jTable2.getModel();
             tm.setRowCount(0);
-            
-            while(resultSet.next()){
+
+            while (resultSet.next()) {
                 Vector<String> pv = new Vector<>();
                 pv.add(resultSet.getString("et_id"));
                 pv.add(resultSet.getString("et_name"));
                 pv.add(resultSet.getString("daily_salary"));
-                
+
                 tm.addRow(pv);
                 jTable2.setModel(tm);
             }
@@ -232,17 +234,19 @@ public class EmployeeTypeReg extends javax.swing.JPanel {
         String name = jTextField2.getText();
         String dailySalary = String.valueOf(jFormattedTextField1.getText());
 
-        if(name.isEmpty()){
+        if (name.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please Enter Name", "Warning", JOptionPane.WARNING_MESSAGE);
-        }else if(dailySalary.isEmpty()){
+        } else if (dailySalary.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please Enter Daily Salary", "Warning", JOptionPane.WARNING_MESSAGE);
-        }else{
+        } else {
             try {
-                MySql.execute("UPDATE `employee_type` SET `et_name` = '"+name+"', `daily_salary` = '"+dailySalary+"' WHERE `et_id` = '"+employeeTypeId+"'");
+                MySql.execute("UPDATE `employee_type` SET `et_name` = '" + name + "', `daily_salary` = '" + dailySalary + "' WHERE `et_id` = '" + employeeTypeId + "'");
                 clear();
                 employeeTypeId = null;
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Employee type Register Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton6ActionPerformed
@@ -255,22 +259,24 @@ public class EmployeeTypeReg extends javax.swing.JPanel {
         String name = jTextField2.getText();
         String dailySalary = String.valueOf(jFormattedTextField1.getText());
 
-        if(name.isEmpty()){
+        if (name.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please Enter Name", "Warning", JOptionPane.WARNING_MESSAGE);
-        }else if(dailySalary.isEmpty()){
+        } else if (dailySalary.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please Enter Daily Salary", "Warning", JOptionPane.WARNING_MESSAGE);
-        }else{
+        } else {
             try {
-                MySql.execute("INSERT INTO `employee_type` (`et_name`,`daily_salary`) VALUES('"+name+"','"+dailySalary+"')");
+                MySql.execute("INSERT INTO `employee_type` (`et_name`,`daily_salary`) VALUES('" + name + "','" + dailySalary + "')");
                 clear();
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Employee Type Update Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
-        if(evt.getClickCount() == 2){
+        if (evt.getClickCount() == 2) {
             int selectedRow = jTable2.getSelectedRow();
             String employeeTypeId = String.valueOf(jTable2.getValueAt(selectedRow, 0));
             this.employeeTypeId = employeeTypeId;

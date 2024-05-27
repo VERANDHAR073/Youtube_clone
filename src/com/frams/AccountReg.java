@@ -1,5 +1,6 @@
 package com.frams;
 
+import com.model.Logs;
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.util.Vector;
@@ -8,8 +9,6 @@ import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
 import java.util.HashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 
 public class AccountReg extends javax.swing.JPanel {
 
@@ -88,7 +87,7 @@ public class AccountReg extends javax.swing.JPanel {
             if (!resultSet.next()) {
                 jTextField2.setText(employeeId);
                 jTextField2.setEnabled(false);
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(this, "Already Have an Account", "Warning", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
@@ -396,7 +395,9 @@ public class AccountReg extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(this, "Already Have an Account", "Warning", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Account Register Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -418,7 +419,9 @@ public class AccountReg extends javax.swing.JPanel {
                 MySql.execute("UPDATE  `employee_login` SET `username` = '" + username + "', `password` = '" + password + "' WHERE `e_nic` = '" + accountEmployee + "'");
                 clean();
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Account Update Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed

@@ -2,9 +2,7 @@ package com.frams;
 
 import java.awt.Color;
 import java.sql.ResultSet;
-import java.util.HashMap;
 import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.model.MySql;

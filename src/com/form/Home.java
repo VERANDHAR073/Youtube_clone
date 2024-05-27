@@ -1,46 +1,53 @@
 package com.form;
 
 import com.chart.ModelChart;
+import com.model.Logs;
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import com.model.MySql;
+import java.util.logging.Level;
 
 public class Home extends javax.swing.JPanel {
 
     public Home() {
         initComponents();
         setOpaque(false);
-        jPanel1.setVisible(false);
-        jPanel2.setVisible(true);
-        incomeExpenses();
-        fualQuantity();
         loadMonth();
         menuDetailsLoad();
+        incomeExpenses();
+        fualQuantity();
+        groceryIncomeExpenses();
+        stockQuantity();
+        chart.setVisible(false);
+        chart2.setVisible(true);
+        chart3.setVisible(false);
+        chart4.setVisible(false);
     }
-    
-    private void menuDetailsLoad(){
+
+    private void menuDetailsLoad() {
         double salesToday = 0.0;
         int itemQty = 0;
         try {
             ResultSet salesSet = MySql.execute("SELECT * FROM `invoice` INNER JOIN `invoice_item` ON `invoice`.`in_id` = `invoice_item`.`in_id` WHERE DATE(`date_time`) = CURDATE()");
-            while(salesSet.next()){
+            while (salesSet.next()) {
                 salesToday += salesSet.getDouble("paid_amount");
                 itemQty += salesSet.getInt("ii_qty");
             }
-            
-            jLabel18.setText("Rs."+salesToday);
+
+            jLabel18.setText("Rs." + salesToday);
             jLabel15.setText(itemQty + " Items");
-            
+
             ResultSet resultSet = MySql.execute("SELECT COUNT(`e_nic`) AS numOfEmployees FROM `employees` WHERE `e_status` = '1'");
-            if(resultSet.next()){
-                jLabel28.setText(resultSet.getString("numOfEmployees")+" Employees");
+            if (resultSet.next()) {
+                jLabel28.setText(resultSet.getString("numOfEmployees") + " Employees");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logs logs = new Logs();
+            logs.logger.log(Level.WARNING, "Home Details Load Fail");
         }
-        
+
     }
 
     private void incomeExpenses() {
@@ -149,11 +156,13 @@ public class Home extends javax.swing.JPanel {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logs logs = new Logs();
+            logs.logger.log(Level.WARNING, "Home Income Chart Fail");
+            logs.logger.log(Level.WARNING, String.valueOf(e));
         }
 
-        chart2.seriesSize = 35;
-        chart2.seriesSpace = 25;
+        chart2.seriesSize = 25;
+        chart2.seriesSpace = 15;
         chart2.addLegend("Income", new Color(12, 84, 175), new Color(0, 108, 247));
         chart2.addLegend("Expense", new Color(54, 4, 143), new Color(104, 49, 200));
         chart2.addData(new ModelChart("January", january));
@@ -171,8 +180,139 @@ public class Home extends javax.swing.JPanel {
         chart2.start();
         chart2.setVisible(true);
     }
-    
-    private void loadMonth(){
+
+    private void groceryIncomeExpenses() {
+        double[] january = new double[2];
+        double[] february = new double[2];
+        double[] march = new double[2];
+        double[] april = new double[2];
+        double[] may = new double[2];
+        double[] june = new double[2];
+        double[] july = new double[2];
+        double[] august = new double[2];
+        double[] september = new double[2];
+        double[] october = new double[2];
+        double[] november = new double[2];
+        double[] december = new double[2];
+
+        try {
+            ResultSet incomeSet = MySql.execute("SELECT * FROM `invoice` WHERE YEAR(`date_time`) = YEAR(CURDATE())");
+            while (incomeSet.next()) {
+                LocalDate date = incomeSet.getDate("date_time").toLocalDate();
+                int month = date.getMonthValue();
+                switch (month) {
+                    case 1:
+                        january[0] += incomeSet.getDouble("paid_amount");
+                        break;
+                    case 2:
+                        february[0] += incomeSet.getDouble("paid_amount");
+                        break;
+                    case 3:
+                        march[0] += incomeSet.getDouble("paid_amount");
+                        break;
+                    case 4:
+                        april[0] += incomeSet.getDouble("paid_amount");
+                        break;
+                    case 5:
+                        may[0] += incomeSet.getDouble("paid_amount");
+                        break;
+                    case 6:
+                        june[0] += incomeSet.getDouble("paid_amount");
+                        break;
+                    case 7:
+                        july[0] += incomeSet.getDouble("paid_amount");
+                        break;
+                    case 8:
+                        august[0] += incomeSet.getDouble("paid_amount");
+                        break;
+                    case 9:
+                        september[0] += incomeSet.getDouble("paid_amount");
+                        break;
+                    case 10:
+                        october[0] += incomeSet.getDouble("paid_amount");
+                        break;
+                    case 11:
+                        november[0] += incomeSet.getDouble("paid_amount");
+                        break;
+                    case 12:
+                        december[0] += incomeSet.getDouble("paid_amount");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            ResultSet expensesSet = MySql.execute("SELECT * FROM `grn` WHERE YEAR(`grn_datetime`) = YEAR(CURDATE())");
+            while (expensesSet.next()) {
+                LocalDate date = expensesSet.getDate("grn_datetime").toLocalDate();
+                int month = date.getMonthValue();
+                switch (month) {
+                    case 1:
+                        january[1] += expensesSet.getDouble("grn_paid");
+                        break;
+                    case 2:
+                        february[1] += expensesSet.getDouble("grn_paid");
+                        break;
+                    case 3:
+                        march[1] += expensesSet.getDouble("grn_paid");
+                        break;
+                    case 4:
+                        april[1] += expensesSet.getDouble("grn_paid");
+                        break;
+                    case 5:
+                        may[1] += expensesSet.getDouble("grn_paid");
+                        break;
+                    case 6:
+                        june[1] += expensesSet.getDouble("grn_paid");
+                        break;
+                    case 7:
+                        july[1] += expensesSet.getDouble("grn_paid");
+                        break;
+                    case 8:
+                        august[1] += expensesSet.getDouble("grn_paid");
+                        break;
+                    case 9:
+                        september[1] += expensesSet.getDouble("grn_paid");
+                        break;
+                    case 10:
+                        october[1] += expensesSet.getDouble("grn_paid");
+                        break;
+                    case 11:
+                        november[1] += expensesSet.getDouble("grn_paid");
+                        break;
+                    case 12:
+                        december[1] += expensesSet.getDouble("grn_paid");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } catch (Exception e) {
+            Logs logs = new Logs();
+            logs.logger.log(Level.WARNING, "Home Income Chart Fail");
+            logs.logger.log(Level.WARNING, String.valueOf(e));
+        }
+
+        chart3.seriesSize = 25;
+        chart3.seriesSpace = 15;
+        chart3.addLegend("Income", new Color(12, 84, 175), new Color(0, 108, 247));
+        chart3.addLegend("Expense", new Color(54, 4, 143), new Color(104, 49, 200));
+        chart3.addData(new ModelChart("January", january));
+        chart3.addData(new ModelChart("February", february));
+        chart3.addData(new ModelChart("March", march));
+        chart3.addData(new ModelChart("April", april));
+        chart3.addData(new ModelChart("May", may));
+        chart3.addData(new ModelChart("June", june));
+        chart3.addData(new ModelChart("July", july));
+        chart3.addData(new ModelChart("August", august));
+        chart3.addData(new ModelChart("September", september));
+        chart3.addData(new ModelChart("Octomber", october));
+        chart3.addData(new ModelChart("November", november));
+        chart3.addData(new ModelChart("December", december));
+        chart3.start();
+        chart3.setVisible(true);
+    }
+
+    private void loadMonth() {
         LocalDate d = LocalDate.now();
         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MMM");
         String date = d.format(f);
@@ -189,49 +329,47 @@ public class Home extends javax.swing.JPanel {
     }
 
     private void fualQuantity() {
-
-        double[] petrol95 = new double[1];
-        double[] petrol92 = new double[1];
-        double[] disal = new double[1];
-        double[] superDisal = new double[1];
-
-        try {
-            ResultSet fualSet = MySql.execute("SELECT * FROM `fuel`");
-            while (fualSet.next()) {
-                switch (fualSet.getInt("fu_id")) {
-                    case 5:
-                        petrol95[0] = fualSet.getDouble("fu_qty");
-                        break;
-                    case 6:
-                        petrol92[0] = fualSet.getDouble("fu_qty");
-                        break;
-                    case 7:
-                        disal[0] = fualSet.getDouble("fu_qty");
-                        break;
-                    case 8:
-                        superDisal[0] = fualSet.getDouble("fu_qty");
-                        break;
-                    default:
-                        break;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         chart.seriesSize = 35;
         chart.seriesSpace = 25;
         chart.addLegend("Quantity", new Color(12, 84, 175), new Color(0, 108, 247));
-        chart.addData(new ModelChart("Petrol 95", petrol95));
-        chart.addData(new ModelChart("Petrol 92", petrol92));
-        chart.addData(new ModelChart("Disal", disal));
-        chart.addData(new ModelChart("Super Disal", superDisal));
+        try {
+            ResultSet fualSet = MySql.execute("SELECT * FROM `fuel`");
+            while (fualSet.next()) {
+                double[] fuelQty = new double[1];
+                fuelQty[0] = fualSet.getDouble("fu_qty");
+                chart.addData(new ModelChart(fualSet.getString("fu_name"), fuelQty));
+            }
+        } catch (Exception e) {
+            Logs logs = new Logs();
+            logs.logger.log(Level.WARNING, "Home Fual Qty Fail");
+            logs.logger.log(Level.WARNING, String.valueOf(e));
+        }
         chart.start();
+    }
+
+    private void stockQuantity() {
+        chart4.seriesSize = 20;
+        chart4.seriesSpace = 15;
+        chart4.addLegend("Quantity", new Color(12, 84, 175), new Color(0, 108, 247));
+        
+        try {
+            ResultSet stockSet = MySql.execute("SELECT `s_qty`,`title` FROM `stock` INNER JOIN `product` ON `stock`.`p_barcode` = `product`.`p_barcode`");
+            while (stockSet.next()) {
+                double[] stockQty = new double[1];
+                stockQty[0] = stockSet.getDouble("s_qty");
+                chart4.addData(new ModelChart(stockSet.getString("title"), stockQty));
+            }
+        } catch (Exception e) {
+            Logs logs = new Logs();
+            logs.logger.log(Level.WARNING, "Home Stock Qty Fail");
+            logs.logger.log(Level.WARNING, String.valueOf(e));
+        }
+        chart4.start();
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         roundPanel1 = new com.swing.RoundPanel();
         jButton2 = new javax.swing.JButton();
@@ -242,9 +380,10 @@ public class Home extends javax.swing.JPanel {
         jButton5 = new javax.swing.JButton();
         roundPanel2 = new com.swing.RoundPanel();
         jPanel2 = new javax.swing.JPanel();
-        chart2 = new com.chart.Chart();
-        jPanel1 = new javax.swing.JPanel();
         chart = new com.chart.Chart();
+        chart2 = new com.chart.Chart();
+        chart3 = new com.chart.Chart();
+        chart4 = new com.chart.Chart();
         roundPanel3 = new com.swing.RoundPanel();
         jLabel21 = new javax.swing.JLabel();
         roundPanel4 = new com.swing.RoundPanel();
@@ -351,43 +490,13 @@ public class Home extends javax.swing.JPanel {
         roundPanel2.setLayout(new javax.swing.OverlayLayout(roundPanel2));
 
         jPanel2.setBackground(new java.awt.Color(51, 51, 51));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(chart2, javax.swing.GroupLayout.DEFAULT_SIZE, 1218, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(chart2, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE))
-        );
+        jPanel2.setLayout(new javax.swing.OverlayLayout(jPanel2));
+        jPanel2.add(chart);
+        jPanel2.add(chart2);
+        jPanel2.add(chart3);
+        jPanel2.add(chart4);
 
         roundPanel2.add(jPanel2);
-
-        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(chart, javax.swing.GroupLayout.DEFAULT_SIZE, 1212, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(chart, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE))
-        );
-
-        roundPanel2.add(jPanel1);
 
         roundPanel3.setBackground(new java.awt.Color(51, 51, 51));
 
@@ -580,34 +689,46 @@ public class Home extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        jPanel1.setVisible(false);
-        jPanel2.setVisible(true);
+
+        chart.setVisible(false);
+        chart2.setVisible(true);
+        chart3.setVisible(false);
+        chart4.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        jPanel1.setVisible(true);
-        jPanel2.setVisible(false);
+
+        chart.setVisible(true);
+        chart2.setVisible(false);
+        chart3.setVisible(false);
+        chart4.setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+
+        chart.setVisible(false);
+        chart2.setVisible(false);
+        chart3.setVisible(true);
+        chart4.setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        chart.setVisible(false);
+        chart2.setVisible(false);
+        chart3.setVisible(false);
+        chart4.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.chart.Chart chart;
     private com.chart.Chart chart2;
+    private com.chart.Chart chart3;
+    private com.chart.Chart chart4;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private main.JImagePanel jImagePanel1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -619,11 +740,7 @@ public class Home extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel5;
     private com.swing.RoundPanel roundPanel1;
     private com.swing.RoundPanel roundPanel2;
     private com.swing.RoundPanel roundPanel3;

@@ -1,5 +1,6 @@
 package com.frams;
 
+import com.model.Logs;
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
+import java.util.logging.Level;
 
 public class GroSuppilerReg extends javax.swing.JPanel {
 
@@ -373,7 +375,9 @@ public class GroSuppilerReg extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(this, "Already Registered This Supplier", "Warning", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Grocery Supplier Register Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -400,7 +404,9 @@ public class GroSuppilerReg extends javax.swing.JPanel {
                 MySql.execute("UPDATE `store_suppliers` SET `ss_fname` = '" + fname + "',`ss_lname` = '" + lname + "',`ss_email` = '" + email + "',`co_id` = '" + companyId + "' WHERE `ss_mobile` = '" + supplierMobile + "'");
                 clean();
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Grocery Supplier Register Update Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed

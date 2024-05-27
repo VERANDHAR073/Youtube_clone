@@ -1,5 +1,6 @@
 package com.frams;
 
+import com.model.Logs;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.sql.ResultSet;
@@ -12,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
 
 public class MarkAttendence extends javax.swing.JPanel {
 
@@ -39,8 +41,8 @@ public class MarkAttendence extends javax.swing.JPanel {
             fv.add("SELECT");
 
             while (resultSet.next()) {
-                fv.add(resultSet.getString("e_fname")+" "+resultSet.getString("e_lname"));
-                pumpersMap.put(resultSet.getString("e_fname")+" "+resultSet.getString("e_lname"), resultSet.getString("e_nic"));
+                fv.add(resultSet.getString("e_fname") + " " + resultSet.getString("e_lname"));
+                pumpersMap.put(resultSet.getString("e_fname") + " " + resultSet.getString("e_lname"), resultSet.getString("e_nic"));
             }
 
             DefaultComboBoxModel cb = new DefaultComboBoxModel(fv);
@@ -92,7 +94,7 @@ public class MarkAttendence extends javax.swing.JPanel {
             while (resultSet.next()) {
                 Vector<String> pv = new Vector<>();
                 pv.add(resultSet.getString("ma_id"));
-                pv.add(resultSet.getString("e_fname")+ " "+ resultSet.getString("e_lname"));
+                pv.add(resultSet.getString("e_fname") + " " + resultSet.getString("e_lname"));
                 pv.add(resultSet.getString("e_contact"));
                 pv.add(resultSet.getString("as_status"));
 
@@ -372,7 +374,9 @@ public class MarkAttendence extends javax.swing.JPanel {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Mark Attendance Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed

@@ -1,17 +1,14 @@
 package com.main;
 
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-import com.main.AdminNavigator;
 import javax.swing.JOptionPane;
-import java.sql.ResultSet;
-import javax.swing.JFrame;
-import com.model.MySql;
-import com.model.UserDetails;
 import javax.swing.UIManager;
+import java.util.logging.Logger;
 
 
 public class LoginNavigator extends javax.swing.JFrame {
+    
+    static Logger logger = Logger.getLogger("logger");
     
     public LoginNavigator() {
         initComponents();

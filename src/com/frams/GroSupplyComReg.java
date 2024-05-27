@@ -1,11 +1,13 @@
 package com.frams;
 
+import com.model.Logs;
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
+import java.util.logging.Level;
 
 public class GroSupplyComReg extends javax.swing.JPanel {
 
@@ -253,7 +255,9 @@ public class GroSupplyComReg extends javax.swing.JPanel {
                 MySql.execute("INSERT INTO `company` (`co_name`,`co_contact`) VALUES('" + name + "','" + comContact + "')");
                 clean();
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Grocery Supply Comapany Register Insert Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -274,7 +278,9 @@ public class GroSupplyComReg extends javax.swing.JPanel {
                 MySql.execute("UPDATE `company` SET `co_name` = '" + name + "',`co_contact` = '" + comContact + "' WHERE `co_id` = '" + companyId + "'");
                 clean();
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Grocery Supply Comapany Register Update Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed

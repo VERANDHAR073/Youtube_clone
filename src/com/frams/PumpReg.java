@@ -1,5 +1,6 @@
 package com.frams;
 
+import com.model.Logs;
 import java.sql.ResultSet;
 import java.awt.Color;
 import java.util.HashMap;
@@ -8,12 +9,13 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
+import java.util.logging.Level;
 
 public class PumpReg extends javax.swing.JPanel {
 
     private String fualId;
     private String pumpId;
-    private static HashMap<String,Integer> fualMap = new HashMap<>();
+    private static HashMap<String, Integer> fualMap = new HashMap<>();
 
     public PumpReg() {
         initComponents();
@@ -23,36 +25,36 @@ public class PumpReg extends javax.swing.JPanel {
         jButton6.setVisible(false);
         loadPumpDetails();
     }
-    
-    private void loadFualType(){
+
+    private void loadFualType() {
         try {
             ResultSet resultSet = MySql.execute("SELECT * FROM `fuel`");
             Vector fv = new Vector();
             fv.add("SELECT");
-            
-            while(resultSet.next()){
+
+            while (resultSet.next()) {
                 fv.add(resultSet.getString("fu_name"));
                 fualMap.put(resultSet.getString("fu_name"), resultSet.getInt("fu_id"));
             }
-            
+
             DefaultComboBoxModel cb = new DefaultComboBoxModel(fv);
             jComboBox1.setModel(cb);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    private void loadFualType(String pump){
+
+    private void loadFualType(String pump) {
         try {
             ResultSet resultSet = MySql.execute("SELECT * FROM `fuel`");
             Vector fv = new Vector();
             fv.add("SELECT");
-            
-            while(resultSet.next()){
+
+            while (resultSet.next()) {
                 fv.add(resultSet.getString("fu_name"));
                 fualMap.put(resultSet.getString("fu_name"), resultSet.getInt("fu_id"));
             }
-            
+
             DefaultComboBoxModel cb = new DefaultComboBoxModel(fv);
             jComboBox1.setModel(cb);
             jComboBox1.setSelectedIndex(Integer.valueOf(pump));
@@ -60,27 +62,27 @@ public class PumpReg extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
-    
+
     private void clearPump() {
         jTextField2.setText("");
         jComboBox1.setSelectedIndex(0);
         jButton6.setVisible(false);
         jButton3.setVisible(true);
     }
-    
-    private void loadPumpDetails(){
+
+    private void loadPumpDetails() {
         try {
             ResultSet resultSet = MySql.execute("SELECT * FROM `pumps` INNER JOIN `fuel` WHERE `pumps`.`fu_id` = `fuel`.`fu_id`");
-            
+
             DefaultTableModel tm = (DefaultTableModel) jTable2.getModel();
             tm.setRowCount(0);
-            
-            while(resultSet.next()){
+
+            while (resultSet.next()) {
                 Vector<String> pv = new Vector<>();
                 pv.add(resultSet.getString("pu_id"));
                 pv.add(resultSet.getString("pu_name"));
                 pv.add(resultSet.getString("fu_name"));
-                
+
                 tm.addRow(pv);
                 jTable2.setModel(tm);
             }
@@ -88,8 +90,8 @@ public class PumpReg extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
-    
-    private void loadpumps(){
+
+    private void loadpumps() {
         try {
             ResultSet resultSet = MySql.execute("SELECT * FROM `pumps`");
             resultSet.next();
@@ -292,18 +294,20 @@ public class PumpReg extends javax.swing.JPanel {
         String name = jTextField2.getText();
         String type = String.valueOf(jComboBox1.getSelectedItem());
 
-        if(name.isEmpty()){
+        if (name.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please Enter Name", "Warning", JOptionPane.WARNING_MESSAGE);
-        }else if(type == "SELECT"){
+        } else if (type == "SELECT") {
             JOptionPane.showMessageDialog(this, "Please Select Fual Type", "Warning", JOptionPane.WARNING_MESSAGE);
-        }else{
+        } else {
             int typeId = fualMap.get(type);
             try {
-                MySql.execute("UPDATE `pumps` SET `pu_name` = '"+name+"', `fu_id` = '"+typeId+"' WHERE `pu_id` = '"+pumpId+"'");
+                MySql.execute("UPDATE `pumps` SET `pu_name` = '" + name + "', `fu_id` = '" + typeId + "' WHERE `pu_id` = '" + pumpId + "'");
                 clearPump();
                 loadPumpDetails();
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Pump Register Update Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton6ActionPerformed
@@ -316,18 +320,20 @@ public class PumpReg extends javax.swing.JPanel {
         String name = jTextField2.getText();
         String type = String.valueOf(jComboBox1.getSelectedItem());
 
-        if(name.isEmpty()){
+        if (name.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please Enter Name", "Warning", JOptionPane.WARNING_MESSAGE);
-        }else if(type == "SELECT"){
+        } else if (type == "SELECT") {
             JOptionPane.showMessageDialog(this, "Please Select Fual Type", "Warning", JOptionPane.WARNING_MESSAGE);
-        }else{
+        } else {
             int typeId = fualMap.get(type);
             try {
-                MySql.execute("INSERT INTO `pumps` (`pu_name`,`fu_id`) VALUES('"+name+"','"+typeId+"')");
+                MySql.execute("INSERT INTO `pumps` (`pu_name`,`fu_id`) VALUES('" + name + "','" + typeId + "')");
                 clearPump();
                 loadPumpDetails();
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Pump Registe Insert Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -337,7 +343,7 @@ public class PumpReg extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
-        if(evt.getClickCount() == 2){
+        if (evt.getClickCount() == 2) {
             int selectedRow = jTable2.getSelectedRow();
             String pumpId = String.valueOf(jTable2.getValueAt(selectedRow, 0));
             this.pumpId = pumpId;

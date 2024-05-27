@@ -1,12 +1,12 @@
 package com.main;
 
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import com.model.Logs;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import javax.swing.JFrame;
 import com.model.MySql;
 import com.model.UserDetails;
-
+import java.util.logging.Level;
 
 public class AdminLogin extends javax.swing.JFrame {
     
@@ -35,7 +35,6 @@ public class AdminLogin extends javax.swing.JFrame {
 
         roundPanel1.setBackground(new java.awt.Color(51, 51, 51));
 
-        jLabel5.setBackground(new java.awt.Color(242, 242, 242));
         jLabel5.setFont(new java.awt.Font("Bahnschrift", 1, 24)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -129,7 +128,7 @@ public class AdminLogin extends javax.swing.JFrame {
                     .addGroup(roundPanel1Layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addGroup(roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -147,7 +146,7 @@ public class AdminLogin extends javax.swing.JFrame {
             .addGroup(roundPanel1Layout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addComponent(jImagePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(jLabel7)
@@ -156,13 +155,13 @@ public class AdminLogin extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23))
         );
 
@@ -185,31 +184,34 @@ public class AdminLogin extends javax.swing.JFrame {
         String username = jTextField1.getText();
         String password = String.valueOf(jPasswordField1.getPassword());
         
-        if(username.isEmpty()){
+        if (username.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please Enter Username", "Warning", JOptionPane.WARNING_MESSAGE);
-        }else if(password.isEmpty()){
+        } else if (password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please Enter Password", "Warning", JOptionPane.WARNING_MESSAGE);
-        }else{
+        } else {
             try {
                 ResultSet resultSet = MySql.execute("SELECT * FROM `employee_login` INNER JOIN `employees` ON `employee_login`.`e_nic`=`employees`.`e_nic` INNER JOIN `employee_type` ON `employees`.`et_id` = `employee_type`.`et_id`"
-                        + " WHERE `username` = '"+username+"' AND `password` = '"+password+"' AND `employees`.`et_id`='1'");
-                if(resultSet.next()){
-                    String name = resultSet.getString("e_fname")+" "+resultSet.getString("e_lname");
+                        + " WHERE `username` = '" + username + "' AND `password` = '" + password + "' AND `employees`.`et_id`='1'");
+                if (resultSet.next()) {
+                    String name = resultSet.getString("e_fname") + " " + resultSet.getString("e_lname");
                     
                     UserDetails user = new UserDetails();
                     user.setName(name);
                     user.setUsername(username);
                     user.setUserType(resultSet.getString("et_name"));
+                    user.setUserTypeId(resultSet.getInt("et_id"));
                     
                     AdminNavigator an = new AdminNavigator(user);
                     an.setVisible(true);
                     an.setExtendedState(JFrame.MAXIMIZED_BOTH);
                     this.dispose();
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(this, "Incorrect credentials or you weren't provided the authority to access!", "Warning", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception ex) {
-                ex.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Admin Login Quary Failed");
+                logs.logger.log(Level.WARNING, String.valueOf(ex));
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -220,21 +222,12 @@ public class AdminLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        int selectOption=JOptionPane.showConfirmDialog(this,"Are you sure about exiting from the system?","Confirm",JOptionPane.YES_NO_OPTION);
-        if(selectOption == JOptionPane.YES_OPTION){
+        int selectOption = JOptionPane.showConfirmDialog(this, "Are you sure about exiting from the system?", "Confirm", JOptionPane.YES_NO_OPTION);
+        if (selectOption == JOptionPane.YES_OPTION) {
             System.exit(0);
-        }                
+        }        
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    public static void main(String args[]) {
-        FlatMacLightLaf.setup();
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                AdminLogin login = new AdminLogin();
-                login.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;

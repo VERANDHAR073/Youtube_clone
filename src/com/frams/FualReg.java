@@ -1,5 +1,6 @@
 package com.frams;
 
+import com.model.Logs;
 import java.sql.ResultSet;
 import java.awt.Color;
 import java.util.HashMap;
@@ -7,12 +8,13 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
+import java.util.logging.Level;
 
 public class FualReg extends javax.swing.JPanel {
 
     private String fualId;
     private String pumpId;
-    private static HashMap<String,Integer> fualMap = new HashMap<>();
+    private static HashMap<String, Integer> fualMap = new HashMap<>();
 
     public FualReg() {
         initComponents();
@@ -258,7 +260,9 @@ public class FualReg extends javax.swing.JPanel {
                 loadFual();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Fuel Register Insert Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -282,12 +286,14 @@ public class FualReg extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Please Enter Price", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
             try {
-                MySql.execute("UPDATE `fuel` SET `fu_name` = '"+name+"',`unit_price` = '"+Double.valueOf(price)+"' WHERE `fu_id` = '"+fualId+"'");
+                MySql.execute("UPDATE `fuel` SET `fu_name` = '" + name + "',`unit_price` = '" + Double.valueOf(price) + "' WHERE `fu_id` = '" + fualId + "'");
                 clearFual();
                 loadFual();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs logs = new Logs();
+                logs.logger.log(Level.WARNING, "Fuel Register Update Fail");
+                logs.logger.log(Level.WARNING, String.valueOf(e));
             }
         }
     }//GEN-LAST:event_jButton5ActionPerformed

@@ -1,16 +1,77 @@
 package com.form;
-import com.formdev.flatlaf.FlatLightLaf;
-import com.frams.BalanceSheet;
-import com.frams.DailyRelease;
-import com.frams.FuelSupplies;
-import com.frams.Profit;
-import java.awt.Component;
+
+import com.model.MySql;
+import java.awt.Color;
+import java.awt.Font;
+import java.sql.ResultSet;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class CustomerManagement extends javax.swing.JPanel {
-
+    
+    private PosAndInvoicing invoice; //catch invoice   
+    public void setInvoice(PosAndInvoicing setting_invoice) { //invoice setter
+        this.invoice = setting_invoice;
+    }
+    
     public CustomerManagement() {
         initComponents();
         setOpaque(false);
+        jTable1.getTableHeader().setBackground(new Color(102,102,102));
+        jTable1.getTableHeader().setForeground(new Color(242,242,242));
+        jTable1.getTableHeader().setFont(new Font("Barnschrift",Font.PLAIN,14));
+        loadCustomersInToTable("cu_fname","ASC","");
+        jButton2.setEnabled(false);
+    }
+    
+    
+    private void loadCustomersInToTable(String column,String sortingMethod,String contactNo){
+        try {
+            ResultSet rs=MySql.execute("SELECT * FROM `customer` WHERE `cu_mobile` LIKE '"+contactNo+"%' ORDER BY `"+column+"` "+sortingMethod+" ");
+            DefaultTableModel dtm=(DefaultTableModel)jTable1.getModel();
+            dtm.setRowCount(0);
+            while(rs.next()){
+                Vector<String> v=new Vector<>();
+                v.add(rs.getString("cu_mobile"));
+                v.add(rs.getString("cu_fname"));
+                v.add(rs.getString("cu_lname"));
+                v.add(rs.getString("cu_email"));
+                v.add(rs.getString("points"));
+                dtm.addRow(v);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    private void searchAndSortingOrder(){
+        int sortIndex=jComboBox1.getSelectedIndex();
+        
+        if(sortIndex==0){
+            loadCustomersInToTable("cu_fname","ASC",jTextField1.getText());
+        }else if(sortIndex==1){
+            loadCustomersInToTable("cu_fname","DESC",jTextField1.getText());
+        }else if(sortIndex==2){
+            loadCustomersInToTable("points","ASC",jTextField1.getText());
+        }else if(sortIndex==3){
+            loadCustomersInToTable("points","DESC",jTextField1.getText());
+        }
+    }
+    
+    
+    private void reset(){
+        jTable1.clearSelection();
+        jButton1.setEnabled(true);
+        jComboBox1.setSelectedIndex(0);
+        jTextField1.setEditable(true);
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+        jTextField5.setText("");
+        jTextField1.requestFocus();
+        jButton2.setEnabled(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -19,38 +80,277 @@ public class CustomerManagement extends javax.swing.JPanel {
 
         roundPanel2 = new com.swing.RoundPanel();
         jLabel5 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jButton3 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField5 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jTextField3 = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jTextField4 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
-        roundPanel2.setBackground(new java.awt.Color(51, 51, 51));
+        roundPanel2.setBackground(new java.awt.Color(71, 71, 71));
+        roundPanel2.setPreferredSize(new java.awt.Dimension(1600, 932));
 
         jLabel5.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel5.setFont(new java.awt.Font("Quicksand", 0, 18)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setFont(new java.awt.Font("Bahnschrift", 1, 20)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(242, 242, 242));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Customer Management");
         jLabel5.setToolTipText("");
+
+        jLabel1.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(242, 242, 242));
+        jLabel1.setText("Mobile Number");
+
+        jTextField1.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jTextField1.setPreferredSize(new java.awt.Dimension(68, 33));
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(242, 242, 242));
+        jLabel2.setText("Sort By");
+
+        jComboBox1.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Name ASC", "Name DSC", "Points ASC", "Points DESC" }));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+
+        jButton3.setBackground(new java.awt.Color(193, 39, 45));
+        jButton3.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(242, 242, 242));
+        jButton3.setText("Reset Fields");
+        jButton3.setBorderPainted(false);
+        jButton3.setMargin(new java.awt.Insets(5, 14, 2, 14));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(242, 242, 242));
+        jLabel3.setText("Total Number of Invoices");
+
+        jTextField5.setEditable(false);
+        jTextField5.setBackground(new java.awt.Color(102, 102, 102));
+        jTextField5.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jTextField5.setForeground(new java.awt.Color(242, 242, 242));
+        jTextField5.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jTextField5.setBorder(null);
+        jTextField5.setFocusable(false);
+        jTextField5.setPreferredSize(new java.awt.Dimension(68, 33));
+        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField5ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(242, 242, 242));
+        jLabel4.setText("First Name");
+
+        jTextField2.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jTextField2.setPreferredSize(new java.awt.Dimension(68, 33));
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(242, 242, 242));
+        jLabel6.setText("Last Name");
+
+        jTextField3.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jTextField3.setPreferredSize(new java.awt.Dimension(68, 33));
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(242, 242, 242));
+        jLabel7.setText("Email Address");
+
+        jTextField4.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jTextField4.setPreferredSize(new java.awt.Dimension(68, 33));
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setBackground(new java.awt.Color(247, 147, 30));
+        jButton1.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(242, 242, 242));
+        jButton1.setText("Create Account");
+        jButton1.setBorderPainted(false);
+        jButton1.setMargin(new java.awt.Insets(5, 14, 2, 14));
+        jButton1.setPreferredSize(new java.awt.Dimension(145, 30));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setBackground(new java.awt.Color(51, 51, 51));
+        jButton2.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(242, 242, 242));
+        jButton2.setText("Update the Account");
+        jButton2.setBorderPainted(false);
+        jButton2.setMargin(new java.awt.Insets(5, 14, 2, 14));
+        jButton2.setPreferredSize(new java.awt.Dimension(174, 30));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jTable1.setBackground(new java.awt.Color(102, 102, 102));
+        jTable1.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jTable1.setForeground(new java.awt.Color(242, 242, 242));
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Mobile Number", "First Name", "Last Name", "Email Address", "Points"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.setFocusable(false);
+        jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout roundPanel2Layout = new javax.swing.GroupLayout(roundPanel2);
         roundPanel2.setLayout(roundPanel2Layout);
         roundPanel2Layout.setHorizontalGroup(
             roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(roundPanel2Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel5)
-                .addContainerGap(726, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addGroup(roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(roundPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(roundPanel2Layout.createSequentialGroup()
+                        .addGroup(roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(roundPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(roundPanel2Layout.createSequentialGroup()
+                                .addGroup(roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(roundPanel2Layout.createSequentialGroup()
+                                        .addGroup(roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(roundPanel2Layout.createSequentialGroup()
+                                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(50, 50, 50)
+                                                .addComponent(jLabel2)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, roundPanel2Layout.createSequentialGroup()
+                                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel6)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(roundPanel2Layout.createSequentialGroup()
+                                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(53, 53, 53)
+                                                .addComponent(jLabel3)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addGroup(roundPanel2Layout.createSequentialGroup()
+                                        .addGap(489, 489, 489)
+                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jScrollPane1))
+                        .addGap(23, 23, 23))))
         );
         roundPanel2Layout.setVerticalGroup(
             roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(roundPanel2Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addGap(21, 21, 21)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(888, Short.MAX_VALUE))
+                .addGroup(roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(roundPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, roundPanel2Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(roundPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
+                .addGap(100, 100, 100))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(roundPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(roundPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1286, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -58,8 +358,175 @@ public class CustomerManagement extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        searchAndSortingOrder();
+    }//GEN-LAST:event_jTextField1KeyReleased
+
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        searchAndSortingOrder();
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        reset();
+        loadCustomersInToTable("cu_fname","ASC","07");
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5ActionPerformed
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3ActionPerformed
+
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String mobile=jTextField1.getText();
+        String firstName=jTextField2.getText();
+        String lastName=jTextField3.getText();
+        String email=jTextField4.getText();
+        
+        if (mobile.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter Mobile Number", "Warning", JOptionPane.ERROR_MESSAGE);
+        } else if (!mobile.matches("^07[01245678]{1}[0-9]{7}$")) {
+                JOptionPane.showMessageDialog(this, "Please Enter a Valid Mobile Number", "Warning", JOptionPane.ERROR_MESSAGE);
+        } else if (firstName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter First Name", "Warning", JOptionPane.ERROR_MESSAGE);
+        } else if (lastName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter Last Name", "Warning", JOptionPane.ERROR_MESSAGE);
+        } else if (email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter the Email Address of Customer", "Warning", JOptionPane.ERROR_MESSAGE);
+        } else if (!email.matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")) {
+                JOptionPane.showMessageDialog(this, "Invalid Email Address", "Warning", JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                ResultSet resultSet = MySql.execute("SELECT * FROM `customer` WHERE `cu_email`='" + email + "' OR `cu_mobile`='" + mobile + "'");
+                if(resultSet.next()){
+                    JOptionPane.showMessageDialog(this, "Customer is already registered", "Warning", JOptionPane.ERROR_MESSAGE);
+                }else{                    
+                    MySql.execute("INSERT INTO `customer`(`cu_mobile`,`cu_fname`,`cu_lname`,`cu_email`,`points`)"
+                    + "VALUES('" + mobile + "','" + firstName + "','" + lastName + "','" + email + "','0')");
+                
+                    reset();
+                    loadCustomersInToTable("cu_fname","ASC","07");
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String mobile=jTextField1.getText();
+        String firstName=jTextField2.getText();
+        String lastName=jTextField3.getText();
+        String email=jTextField4.getText();
+        
+        if (firstName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter First Name", "Warning", JOptionPane.ERROR_MESSAGE);
+        } else if (lastName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter Last Name", "Warning", JOptionPane.ERROR_MESSAGE);
+        } else if (email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter Your Email", "Warning", JOptionPane.ERROR_MESSAGE);
+        } else if (!email.matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")) {
+                JOptionPane.showMessageDialog(this, "Invalid Email Address", "Warning", JOptionPane.ERROR_MESSAGE);
+        } else {
+            try{
+                ResultSet resultSet = MySql.execute("SELECT * FROM `customer` WHERE `cu_email`='" + email + "'");
+                
+                boolean userWithParticularEmailExists=false;
+                
+                if(resultSet.next()){
+                    if(resultSet.getString("cu_mobile").equals(mobile)){
+                        userWithParticularEmailExists=true;
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Another customer is already registered with the particular email address", "Warning", JOptionPane.ERROR_MESSAGE);
+                    }
+                }else{
+                    userWithParticularEmailExists=true;
+                }
+                
+                if(userWithParticularEmailExists){
+                    MySql.execute("UPDATE `customer` SET `cu_fname`='" + firstName + "',`cu_lname`='" + lastName + "',`cu_email`='" + email + "' "
+                    + " WHERE `cu_mobile`='"+mobile+"'");
+                
+                    reset();
+                    loadCustomersInToTable("cu_fname","ASC","07");
+                }
+            }catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        int r=jTable1.getSelectedRow();
+
+        String m=String.valueOf(jTable1.getValueAt(r,0));
+        String f=String.valueOf(jTable1.getValueAt(r,1));
+        String l=String.valueOf(jTable1.getValueAt(r,2));
+        String e=String.valueOf(jTable1.getValueAt(r,3));
+        
+        if("None".equals(m)){
+            jButton2.setEnabled(false);
+        }else{
+            jButton2.setEnabled(true);
+        }
+
+        jTextField1.setText(m);
+        jTextField2.setText(f);
+        jTextField3.setText(l);
+        jTextField4.setText(e);
+        jTextField1.setEditable(false);
+        jButton1.setEnabled(false);
+
+        if(evt.getClickCount()==2){
+            reset();
+        }
+
+        try {
+            ResultSet resultSet = MySql.execute("SELECT COUNT(`in_id`) FROM `invoice` WHERE `cu_mobile`='" + m + "'");
+
+            if(resultSet.next()){
+                String count=resultSet.getString(1);
+                jTextField5.setText(count);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+    }//GEN-LAST:event_jTable1MouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
     private com.swing.RoundPanel roundPanel2;
     // End of variables declaration//GEN-END:variables
 }

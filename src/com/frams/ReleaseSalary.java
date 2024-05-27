@@ -1,5 +1,6 @@
 package com.frams;
 
+import com.model.Logs;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.sql.ResultSet;
@@ -11,6 +12,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
+import java.util.logging.Level;
 
 public class ReleaseSalary extends javax.swing.JPanel {
 
@@ -101,10 +103,6 @@ public class ReleaseSalary extends javax.swing.JPanel {
 
             } else {
                 JOptionPane.showMessageDialog(this, "Please Select month", "Warning", JOptionPane.WARNING_MESSAGE);
-            }
-
-            {
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -546,7 +544,9 @@ public class ReleaseSalary extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Already Paid to Employee For this Month", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logs logs = new Logs();
+            logs.logger.log(Level.WARNING, "Salary Releasing fail");
+            logs.logger.log(Level.WARNING, String.valueOf(e));
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 

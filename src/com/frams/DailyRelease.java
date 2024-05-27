@@ -1,6 +1,6 @@
 package com.frams;
 
-import com.form.*;
+import com.model.Logs;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import com.model.MySql;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
 
 public class DailyRelease extends javax.swing.JPanel {
 
@@ -69,10 +70,10 @@ public class DailyRelease extends javax.swing.JPanel {
             LocalDate d = LocalDate.now();
             DateTimeFormatter f = DateTimeFormatter.ofPattern("MM");
             String month = d.format(f);
-            
+
             ResultSet resultSet = MySql.execute("SELECT * FROM `release` "
                     + "INNER JOIN `employees` ON `release`.`e_nic` = `employees`.`e_nic` "
-                    + "INNER JOIN `pumps` ON `release`.`pu_id` = `pumps`.`pu_id` WHERE MONTH(`r_date`) = '"+month+"'");
+                    + "INNER JOIN `pumps` ON `release`.`pu_id` = `pumps`.`pu_id` WHERE MONTH(`r_date`) = '" + month + "'");
 
             DefaultTableModel tmodel = (DefaultTableModel) jTable2.getModel();
             tmodel.setRowCount(0);
@@ -430,7 +431,9 @@ public class DailyRelease extends javax.swing.JPanel {
                         JOptionPane.showMessageDialog(this, "Already Released", "Warning", JOptionPane.WARNING_MESSAGE);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Logs logs = new Logs();
+                    logs.logger.log(Level.WARNING, "Daily Release Database Insert Fail");
+                    logs.logger.log(Level.WARNING, String.valueOf(e));
                 }
             }
         }

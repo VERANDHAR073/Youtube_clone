@@ -2,11 +2,9 @@ package com.main;
 
 import com.form.Home;
 import com.form.ImportingAndReleasing;
-import com.form.PosAndInvoicing;
 import com.form.PumperDetails;
 import com.form.Register;
 import com.form.Reports;
-import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.model.UserDetails;
 import com.swing.ButtonMenu;
 import java.awt.Color;
@@ -19,7 +17,7 @@ public class AdminNavigator extends javax.swing.JFrame {
         initComponents();
         setBackground(new Color(0, 0, 0, 0));
         roundPanel1.setOpaque(true);
-        user.loadUserDetails(userDetails.getName(),userDetails.getUserType());
+        user.loadUserDetails(userDetails.getName(),userDetails.getUserType(),userDetails.getUserTypeId());
         showForm(new Home());
         setSelected(buttonMenu2);
     }
